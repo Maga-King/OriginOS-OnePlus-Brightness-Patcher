@@ -10,7 +10,7 @@ from research_native import Elf
 from rom_io import Layout,metadata,new_session,commit,restore
 import cil_policy
 
-VERSION='1.0.1'
+VERSION='1.0.2'
 LIBS=('libsdmcore.so','libdemura_oem_plugin.so')
 
 def relocate(data):
@@ -18,8 +18,11 @@ def relocate(data):
     e=Elf(data);sec=e.elf.get_section_by_name('.rodata')
     if sec is None:raise ValueError('显示库缺少 .rodata')
     lo,hi=sec['sh_offset'],sec['sh_offset']+sec['sh_size']
-    new=b'/vendor/etc/mio_colors/'
-    for old in (b'/my_product/vendor/etc/',b'/vendor/etc/op13_color/',new):
+    # Keep every literal and any suffix-pointer at its existing ELF address.
+    # Linux treats the repeated separator as one; the actual folder is cos_color.
+    new=b'/vendor/etc/cos_color//'
+    for old in (b'/my_product/vendor/etc/',b'/vendor/etc/op13_color/',b'/vendor/etc/mio_colors/',new):
+        if len(old)!=len(new):raise ValueError('显示配置路径必须等长')
         start=0
         while (i:=data.find(old,start))>=0:
             if not lo<=i<hi or (i and data[i-1]):raise ValueError('配置路径不在独立只读字符串')
@@ -110,7 +113,7 @@ def prepare(donor,target,session,choice=None,hbm='full40k',log=print,sensor_mode
     for name in donor.paths('my_product/vendor/etc/'):
         basename=PurePosixPath(name).name
         if basename.startswith(('display_','multimedia_display_')) and basename.endswith('.xml'):
-            payload['vendor/etc/mio_colors/'+basename]=donor.read(name)
+            payload['vendor/etc/cos_color/'+basename]=donor.read(name)
     # Export each CWB/Fusion/colour variant as reference. This Vivo-based route
     # has no added OPPO Fusion consumer, and does not claim one from file copying.
     for name in donor.paths():

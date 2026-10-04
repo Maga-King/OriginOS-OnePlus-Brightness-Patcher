@@ -1,4 +1,4 @@
-MIO OriginOS 亮度 / HDR 内置 PATCH 1.0.1
+MIO OriginOS 亮度 / HDR 内置 PATCH 1.0.2
 2026-10-04
 
 用途
@@ -34,7 +34,8 @@ MIO OriginOS 亮度 / HDR 内置 PATCH 1.0.1
 - 在目标自身的 SurfaceFlinger 中定位亮度输入/输出、Apollo 逆表、SDR 上限和 P3/HDR/杜比色彩入口。
 - 在目标自身的 libsensorservice_ex.so 中定位 lux 分发，把已有效的标准光照交给原 Vivo 滤波链，避免重复处理私有别名。
 - 处理目标 vivo_config.ini 和已有 SKU 版本的亮度开关。内置后启动早期即可读到，避免晚挂载旧缓存。
-- 只修改目标 libsdmcore / demura 库内的只读配置路径，把 /my_product/vendor/etc 指向 /vendor/etc/mio_colors。
+- 只修改目标 libsdmcore / demura 库内的只读配置路径，把 /my_product/vendor/etc 指向 /vendor/etc/cos_color。
+  库内写作 /vendor/etc/cos_color//，以等长替换保留字符串地址；连续斜线由系统按正常目录解析。
 - 从官方包复制显示 XML 到该路径，不恢复/替换 vendor 显示库群。
 - 合并必要 CIL，实际编译 normal / debug，并在存在时编译 vivo-debug 分支；更新已有预编译策略缓存。
 - 更新修改分区的文件权限、SELinux 标签及新目录条目；全部准备通过后才写入目标。

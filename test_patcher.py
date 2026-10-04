@@ -40,9 +40,9 @@ class FixtureTests(unittest.TestCase):
     def test_double_system_metadata_and_no_props(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)/'ROM';self.fixture(root);layout=Layout(root)
-            out,specs,_=metadata(layout,{'system/etc/a':b'x','vendor/etc/mio_colors/new.xml':b'<a/>'})
+            out,specs,_=metadata(layout,{'system/etc/a':b'x','vendor/etc/cos_color/new.xml':b'<a/>'})
             self.assertIn(b'system/system/etc/a 0 0 0644',out['config/system_fs_config'])
-            self.assertEqual(specs['vendor/etc/mio_colors/new.xml']['label'],'u:object_r:vendor_configs_file:s0')
+            self.assertEqual(specs['vendor/etc/cos_color/new.xml']['label'],'u:object_r:vendor_configs_file:s0')
             self.assertNotIn('system/etc/a',out)
     def test_cil_idempotence_and_preservation(self):
         text='; existing\n(type test)\n(typepermissive sysfs_oled_hbm)\n'
@@ -162,7 +162,7 @@ class IntegrationTests(unittest.TestCase):
             after_sf=(target/'system/system/bin/surfaceflinger').read_bytes()
             self.assertNotEqual(old_sf,after_sf)
             vendor=(target/'vendor/lib64/libsdmcore.so').read_bytes()
-            self.assertEqual(vendor.replace(b'/vendor/etc/mio_colors/',b'/my_product/vendor/etc/'),old_vendor)
+            self.assertEqual(vendor.replace(b'/vendor/etc/cos_color//',b'/my_product/vendor/etc/'),old_vendor)
             sre=json_read((target/'system/system/etc/LcmConfig/LcmSreConfig.json').read_text())
             self.assertEqual(sre[0]['panel'][0]['hbmMap'],[3515,4094])
             self.assertIn('BEGIN MIO ORIGIN BRIGHTNESS',(target/'vendor/etc/selinux/vendor_sepolicy.cil').read_text())
