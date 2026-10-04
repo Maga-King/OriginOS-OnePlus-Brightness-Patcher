@@ -1,0 +1,67 @@
+name: 编译 Windows 生成器
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: 从源码构建原生辅助文件
+    runs-on: ubuntu-24.04
+    steps:
+      - name: 获取源码
+        uses: actions/checkout@v4
+      - name: 安装编译器
+        run: sudo apt-get update && sudo apt-get install -y clang make gcc-mingw-w64-x86-64
+      - name: 编译 ARM64 对象与 Windows SELinux 编译器
+        run: python3 ci/build_native.py
+      - name: 保存原生构建结果
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-assets
+          path: |
+            assets/*.o
+            assets/native/secilc.exe
+          retention-days: 14
+  windows:
+    name: 编译和打包 Windows 生成器
+    needs: native
+    runs-on: windows-2022
+    env:
+      PYTHONHASHSEED: '0'
+    steps:
+      - name: 获取源码
+        uses: actions/checkout@v4
+      - name: 获取原生构建结果
+        uses: actions/download-artifact@v4
+        with:
+          name: native-assets
+          path: assets
+      - name: 配置与本地相同的 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.10'
+          architecture: x64
+          cache: pip
+      - name: 安装固定版本依赖
+        run: python -m pip install -r requirements.txt
+      - name: 执行公开源码测试
+        run: python -m unittest test_patcher -v
+      - name: 构建独立 EXE
+        run: python -m PyInstaller --noconfirm MIO_OriginOS_Patcher.spec
+      - name: 验证图形界面启动
+        run: |
+          $process = Start-Process -FilePath .\dist\MIO_OriginOS_Patcher.exe -ArgumentList '--smoke' -PassThru -Wait -WindowStyle Hidden
+          if ($process.ExitCode -ne 0) { throw "图形界面启动失败：$($process.ExitCode)" }
+      - name: 打包中文使用说明和许可证
+        run: python ci/make_distribution.py
+      - name: 保存 Windows 发布候选包
+        uses: actions/upload-artifact@v4
+        with:
+          name: MIO_OriginOS_Patcher_Windows
+          path: dist/*_Windows.zip
+          retention-days: 30

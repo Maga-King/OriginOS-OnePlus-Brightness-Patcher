@@ -1,0 +1,16 @@
+第三方来源与分发范围
+
+SELinuxProject / selinux 3.9 基础提交：
+919e9e64cc4b20f5a1e4df1e38cce1bfe15aff09
+https://github.com/SELinuxProject/selinux
+内置 secilc.exe 来自本地 DolbyBuiltinPatcher 的 Windows/Android 兼容构建。
+compiler_source 保存 libsepol、secilc、兼容头及 MinGW 构建脚本；组件按各自 LICENSE 使用。
+可在安装 MinGW 的 Linux/WSL 环境运行 compiler_source/native/build.sh 重建。
+本包不把编译器或厂商代码重新授权为本工具原创。
+
+运行时使用 Python、Tcl/Tk、Capstone、pyelftools、PyInstaller，相关许可证另附。
+Unicorn 仅用于源码中的离线仿真测试，不是终端用户 PATCH 的必要运行组件。
+
+reference 包含用户提供/授权采集的厂商专有系统二进制与测试材料，仅作本地研究范例。
+保存这些文件不等于取得公开再分发权；准备公开发布时，请仅发布具有相应授权的工具代码，
+移除厂商二进制、ROM 片段、视频、设备日志及个人路径信息，并保留第三方许可证。
