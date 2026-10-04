@@ -41,5 +41,6 @@ def main():
 
 
 if __name__=='__main__':
+    if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf8')
     sys.path.insert(0,str(ROOT))
     main()
