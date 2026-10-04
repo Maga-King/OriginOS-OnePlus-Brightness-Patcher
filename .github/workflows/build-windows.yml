@@ -16,7 +16,7 @@ jobs:
       - name: 获取源码
         uses: actions/checkout@v4
       - name: 安装编译器
-        run: sudo apt-get update && sudo apt-get install -y clang make gcc-mingw-w64-x86-64
+        run: sudo apt-get update && sudo apt-get install -y clang make flex gcc-mingw-w64-x86-64
       - name: 编译 ARM64 对象与 Windows SELinux 编译器
         run: python3 ci/build_native.py
       - name: 保存原生构建结果

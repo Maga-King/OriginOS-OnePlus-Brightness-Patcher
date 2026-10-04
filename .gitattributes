@@ -6,3 +6,7 @@
 *.md text eol=lf
 *.json text eol=lf
 *.cmd text eol=crlf
+*.c text eol=lf
+*.h text eol=lf
+*.spec text eol=lf
+Makefile text eol=lf

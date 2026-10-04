@@ -1,4 +1,4 @@
-import io,json,shutil,struct,tempfile,unittest
+import io,json,os,shutil,struct,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch as mock_patch
 from elftools.elf.elffile import ELFFile
@@ -17,6 +17,7 @@ from cil_policy import merge,RULES
 
 ROOT=Path(__file__).resolve().parent;REF=ROOT/'reference'
 if not REF.exists():REF=ROOT.parent/'reference'
+if os.environ.get('MIO_TEST_REFERENCE'):REF=Path(os.environ['MIO_TEST_REFERENCE'])
 EXAMPLE=REF/'example_inputs'
 
 class FixtureTests(unittest.TestCase):
@@ -137,6 +138,19 @@ class NativeTests(unittest.TestCase):
 
 @unittest.skipUnless(EXAMPLE.exists(),'Reference inputs not installed')
 class IntegrationTests(unittest.TestCase):
+    def test_13t_capture_preserves_sensor_and_exports_cil(self):
+        from build_capture_bundle import capture_fixture
+        with tempfile.TemporaryDirectory(prefix='mio_13t_rules_') as tmp:
+            target=capture_fixture(REF/'OP13T_captured_inputs/target',Path(tmp)/'OriginOS')
+            sensor=(target/'system/lib64/libsensorservice.so').read_bytes()
+            session,r=patch(target,REF/'OP13T_captured_inputs/donor',sensor_mode='preserve',cil_mode='rules-only',log=lambda _:None)
+            self.assertEqual((target/'system/lib64/libsensorservice.so').read_bytes(),sensor)
+            self.assertFalse((target/'system/lib64/libsensorservice_ex.so').exists())
+            self.assertFalse(r['lux']['patched']);self.assertFalse(r['cil']['compiled'])
+            self.assertEqual((session/'需要添加的SELinux规则.cil').read_text(encoding='utf8').strip(),RULES)
+            sre=json_read((target/'system/etc/LcmConfig/LcmSreConfig.json').read_text())
+            self.assertTrue(all(p['hbmMap_auto']==[3515,4094] for x in sre for p in x['panel']))
+
     def test_real_patch_repeat_restore_and_CIL(self):
         with tempfile.TemporaryDirectory(prefix='mio_origin_integration_') as tmp:
             target=Path(tmp)/'OriginOS';shutil.copytree(EXAMPLE/'OriginOS_PD2620',target)
