@@ -15,4 +15,5 @@ assets/*.o
 *.a
 compiler_source/**/*.o
 compiler_source/**/*.log
+compiler_source/assets/
 !compiler_source/**/Makefile
