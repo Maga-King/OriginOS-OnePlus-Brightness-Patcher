@@ -1,0 +1,1520 @@
+OriginOS 移植到一加：自动亮度、HBM、HDR 与 CWB 从零修复教程
+整理日期：2026-10-05
+范围：本轮从提取 OriginOS/DNA 原包、制作 Demo 开始，到 QHD 蓝色 CWB 实测为止。
+不展开此前澎湃 OS3/OS4 的移植史。
+
+这是一份“适配方法＋现有成果使用说明＋失败经验”，不是任意一加通刷包说明。
+范例硬件：一加13，PJZ110，project 23821，SM8750。
+目标系统范例：移植 OriginOS，系统属性可伪装为 PD2620/V2620A 等。
+另有一加13T 原始资料与离线生成范例，但不能把它当成全部实机验收通过。
+本文不保存账号密码、GitHub 凭据、用户数据或另一台手机的 persist 校准分区。
+
+=============================================================================
+目录
+=============================================================================
+01. 最终走的是什么路线，哪些已经完成
+02. 术语、单位与“同样亮度”的误区
+03. 开工前的环境、备份与材料来源
+04. 一加官方供体：完整取材清单与单 CMD 提取
+05. OriginOS 目标：取材清单与真机单 SH 提取
+06. 确认真实机型、面板、传感器、分辨率和正在运行的文件
+07. 从 ColorOS 面板表转换 Vivo 亮度配置
+08. 修复 HBM/SRE：内核节点、lux 分派与统一回调
+09. 修复原生亮度传输和 HDR/SDR 分离
+10. ColorOS 调色配置、路径重定位与 HDR 图片
+11. HDR UI、锁屏跳亮和 AOD：问题要拆开
+12. 屏下光感与 CWB：取色、时序、校准和事件补偿
+13. FHD/QHD、LTPO、旋转与 DC/FOD 分支
+14. SELinux、属主权限、CIL 与预编译策略
+15. 双 ROM 一键 PATCH 工具的实际使用
+16. Magisk/KernelSU 模块、挂载、DSU 与固化
+17. 测试、日志、故障定位与回退
+18. 一加13T及其他机型的适配实例
+19. 文件、源码、历史版本索引与验收清单
+20. 官方资料与本教程的证据边界
+
+=============================================================================
+01. 最终路线与状态：先读这一章
+=============================================================================
+
+1.1 不是“复制 ColorOS 文件就彻底换成 OPPO 自动亮度”。
+
+当前基础路线：
+  Vivo 自动亮度引擎、滤波、学习、普通 lux 曲线形状、开关和生命周期
+  ＋实际一加屏幕的 DBV/nit/Apollo 映射
+  ＋适配一加显示 HAL 的原生亮度传输
+  ＋Vivo HBM/SRE 所需的只读内核兼容 ABI
+  ＋标准 lux 交给 Vivo 策略的分派修复
+  ＋后续添加的一加官方硬件 CWB 取色和屏下漏光补偿。
+
+没有整个换掉 Vivo services.jar，没有用 LSPosed/Nyako 框架作为最终基础链路，
+也没有通过 root 守护进程不断写背光节点来抢控制权。
+“配置按一加对齐”和“引擎完整换成 OPPO”不是同一件事。
+但也不是完全无hook：后期CWB库有进程内native生命周期trampoline，
+用于接入当前SensorHAL的AIDL/HIDL activate；它与Java/LSPosed hook是不同层。
+
+1.2 已有证据支持的成果。
+
+【基础适配】
+  已做一加13的配置转换、标准亮度输入/输出修复、统一亮度映射和 HBM lux 分派。
+  对相应目标二进制做过 ARM64 离线仿真，另做过实机开机、播放、户外等测试。
+  后续已把文件内置到目标解包并提供双 ROM PATCH 工具。
+
+【内核】
+  KSU、KSUN 正式分支补齐亮度只读 ABI 与按机型/平台路由。
+  两次对应的完整 Actions 编译成功并检查最终 msm_drm.ko。
+  用户刷入新内核后反馈全局 HBM 能正常激发。
+
+【普通 CWB】
+  当前手机运行 op13_cos_cwb v5 与独立显示节点权限模块 v3。
+  FHD 普通五色均跟随；用户手动 FHD→QHD 切换后蓝色也正确。
+  QHD 蓝色时：官方回调、显示服务 RGB 缓存、补偿采用 RGB 都是 0,0,255。
+  实际 ROI 1010,148—1048,190；1596 像素均蓝，取色与补偿计算继续推进。
+  时间上报失败为 0；标准光感副本与完整原始包关联未丢失。
+
+【权限/指纹】
+  关闭 SELinux/AVC 伪装后发现真实显示节点拒绝，加入必要权限并重启。
+  用户之后回复已恢复；不能把所有低亮/黑屏都归因于 CWB 或同一个内核问题。
+
+1.3 明确还没全部完成的部分。
+
+  A. 官方 DC/FOD 场景会选择 SF 取色。Vivo SF 没有现成同名 OPPO 私有监听接口。
+     已重建 SF 数学算法，404 组测试与官方 ARM64 RGB/分类/矩阵结果一致。
+     但正式运行时的画面更新触发、颜色矩阵和 capture/present fence 接入还未完成。
+     不能说 DC/FOD 已百分百复刻，更不能直接删除 DC guard。
+
+  B. 最新 cwb_compensator.cpp 已加 DC/hall/factory 切换、快速停启、迟到回调清理。
+     独立单测通过；这些源码改动尚未打包安装到当前运行的 v5。
+     复刻“已运行版本”与继续构建“最新研发源码”要分清。
+
+  C. HDR/杜比的亮度分离和可播放，不等于所有模式、截图、白点、色准全部正确。
+     播放整屏发黄、前后台紫绿/截图异常曾发生，必须单独做模式和色彩检查。
+     不能凭文件存在、App显示比率或肉眼觉得更亮就宣布完整色准合格。
+
+  D. 新一加13T/其他机型只用自己的取材重新生成，再做实机验收。
+     OP13 的 CWB 运行库补丁是专项实验，不是现有生成器已全机型自动实现的功能。
+
+1.4 从最初OriginOS修复开始，本轮实际经历的阶段。
+
+  取两份DNA与本机官方材料：先检查能否保留Vivo引擎，避免一开始复制整套OPPO框架。
+  Demo/配置版：Vivo旧亮度域换成一加范围，但普通上限、HBM、色彩仍暴露下层不匹配。
+  内核兼容：保留一加原驱动，新增Vivo可读的亮度状态ABI，配套匹配msm_drm.ko。
+  原生传输：补目标SF输入与输出，HDR/SDR开始出现分离；再修Apollo归一化和SDR上限。
+  色彩/HDR：分开恢复误套13T的硬件材料，另修真实面板intent与配置路径。
+  HBM深挖：查SRE实际私有lux而不是只看App；BC05分派、BC06统一输出及早期INI。
+  工具固化：双ROM自动PATCH、before/after、CIL/config元数据、多机型13T离线样例。
+  锁屏问题：HDR UI开关、AOD过渡、指纹HBM退出分别定位，不把它们全归自动曲线。
+  CWB补偿：从官方校准/时间窗/色块对照开始，逐步修ELF加载、租约、完整包和缓冲布局。
+  当前结果：普通CWB两档分辨率通过，DC/SF正式后端与部分状态修正仍属于研发分支。
+
+旧实验包名只是阶段标记；复刻应使用下面的分层流程，不需要挨个刷历史失败版本。
+
+=============================================================================
+02. 术语和单位
+=============================================================================
+
+lux：环境光照度，来自传感器及可能的屏下补偿。40000 lux 是光照，不是40000 nit。
+nit：屏幕亮度单位；表中的标称 nit 不一定等于当前屏幕实测亮度。
+DBV：驱动背光数字域。OP13 范例普通上限3515、峰值4094；其他机型重新读取。
+UI 亮度：亮度条的值，可能是0～1、0～255或算法域；不能直接当DBV或nit。
+Apollo：一加显示亮度映射，可能有逻辑、物理背光和亮度值多个列。
+HBM/GHBM：强光全局高亮。与指纹局部高亮、指纹光斑并非同一个状态。
+SRE/ORE：厂商强光/可读性等增强链路；兼容节点存在不代表增强功能真实实现。
+CWB：显示硬件局部取色，用于估算屏幕对屏下光感的漏光，不是环境光传感器本体。
+Fusion：用原始RGBC、显示内容、亮度、工厂校准和时序算出补偿后的环境lux。
+SF：SurfaceFlinger，系统显示合成器。
+HDR/SDR比率：显示状态或图层合成状态的比率。满亮度时余量不足，可能趋近1；
+             但也可能来自上限/状态没更新，必须结合实际nits、图层和背光判断。
+
+同一环境下两个系统 lux 不同，不能直接拍脑袋拟合一个恒定倍率：
+  传感器类型、单位、积分时间、算法版本、是否补偿、取色区、亮度、工厂校准都可能不同。
+  必须先比较同一个物理传感器的同一完整原始包，再比较两边最终消费的值。
+  屏下传感器漏光依赖画面颜色和DBV，通常不能用一个与画面无关的常数修正。
+
+=============================================================================
+03. 开工前的环境、备份与来源
+=============================================================================
+
+3.1 三类材料分开保存。
+
+  target_origin/       已经完成基础移植、能正常开机的 OriginOS 解包。
+  donor_coloros/       实际硬件机型的官方 ColorOS16 解包，供体只读。
+  reference_vivo/      目标 OriginOS 对应 Vivo 官方包，可另留其他 Vivo 机型作旁证。
+  captures_coloros/    实际一加官方系统的运行日志、节点、模块和校准读取。
+  captures_origin/    同一物理手机 OriginOS 下的相同场景记录。
+  backups/            每次修改前后文件、源码版本、权限和部署记录。
+
+本轮曾使用的路径仅作例子：
+  电脑 E:\MIO\ColorOS16，历史原始 my_product.img 提取与官方CWB补充ZIP。
+  C:\Users\a1510\Downloads\my_product..zip 是补充官方 Fusion/CWB 配置材料。
+  手机 /data/DNA/DNA_origin 是移植目标，后面也出现 /data/DNA/origin 命名。
+  /data/DNA/SELINUXQUCAI1、DNA_SELINUXQUCAI1 是移植对应来源材料中的命名。
+  /data/DNA/DNA_selinux2 是另一 Vivo 设备的辅助参考。
+
+名字不是版本证据。目录重命名不等于出现“新旧ROM”；同名目录也可能被用户继续修改。
+应记录实际 fingerprint、Android版本、文件来源和提取时间。
+特别是本轮实提一加主系统参考已有 ColorOS17，不能把它的二进制说成 ColorOS16。
+E:\MIO\ColorOS16里部分自动亮度文件曾被用户改过，不能仅凭目录名当纯官方供体。
+早期/sdcard/my_product.img由用户确认是纯官方；空的运行时my_product分区不能代替镜像。
+用镜像或ZIP取材要保留内部路径，不从另一个项目的同名文件夹补入未知改件。
+历史 C16 Main_1_3 与本轮实提 C17 Main_1_3 的完整 JSON 比较相等；
+这不推出所有库、所有机型、所有版本都相等。
+
+3.2 开始前的基本条件。
+
+  - 确认物理机型、SoC、屏幕面板，而不是只看改过的ro.product.model。
+  - vendor、odm、内核、显示HAL本来要能支撑该硬件正常显示、指纹和基础传感器。
+  - 先完成基础移植；本教程不负责用几份JSON修复完全不工作的HAL。
+  - 不带之前由特定移植包引起的hals.conf去重修复；它不是通用亮度适配必选项。
+  - 备份原boot与当前槽vendor_dlkm等必要镜像，保留可用Recovery/fastbootd。
+  - 记录所有启用模块；不要同时叠多个旧亮度修复、旧SF、旧CWB库。
+  - 关闭会隐藏真实Enforcing/AVC状态的伪装，诊断数据才可信。
+  - 多设备ADB必须始终加 -s 序列号，禁止靠第一台设备猜机型。
+
+只需要可追溯备份和必要结构/运行检查，不要求每次刷入前做大批SHA256扫描。
+但是“不要无用哈希校验”不等于允许损坏ELF、数组越界、错误文件标签或错误槽位。
+
+3.3 电脑工具。
+
+  MIO/DNA或能正确解payload/super、ext4/EROFS的解包工具。
+  ADB/fastboot、Python3、Android NDK clang、LLVM readelf/nm/objdump。
+  反编译框架时优先查看smali；JAR无classes.dex时同时取odex/vdex。
+  JADX可以辅助检索，不要把反编译伪代码当成真实寄存器和条件分支。
+  ARM64原生分析使用符号、反汇编、.gnu_debugdata及必要的Unicorn仿真。
+  需要图形App时使用Android SDK；本工作区Java使用 E:\MIO\ace3\tools\temurin17。
+  WSL可用于secilc、宿主C++测试；不需要把密码写入脚本或教程。
+
+=============================================================================
+04. 一加官方供体：取材清单
+=============================================================================
+
+优先要“真实机型完整官方解包”，不要只拿别人已经修改的几个自动亮度XML。
+同是SM8750也不能用一加13T的整套vendor代替一加13。
+
+4.1 必须优先提取的目录。
+
+  /my_product/etc/fusionlight_profile/             所有JSON，不只Main_1_3。
+  /my_product/vendor/etc/                          全部显示/调色/亮度相关配置。
+  /my_product/etc/                                 防止私有配置实际在此处。
+  /my_product/properties/                          工程号/面板/显示相关属性。
+  /odm/etc/display/                                CWB权重、区域定义及显示配置。
+  /vendor/etc/                                     原生显示配置和服务相关材料。
+  /vendor/lib64/、/vendor/lib/                      显示/CWB/demura及依赖。
+  /vendor/bin/hw/                                  运行显示/传感器HAL服务来源。
+  /vendor/etc/init/、/vendor/etc/vintf/              服务启动和接口声明。
+  /system/bin/surfaceflinger
+  /system/lib64/、/system_ext/lib64/                SF/GUI/传感器及Fusion客户端材料。
+  /system/framework/、/system_ext/framework/        光感、自动亮度、SystemUI相关框架。
+  /system_ext/etc/、/product/etc/                  配套配置与资源。
+  /vendor_dlkm/lib/modules/                        msm_drm.ko等真实内核模块。
+
+有些官方包还会有：
+  /system_ext/oplus/sys_sensor_config.xml
+必须单独检查并补提。现有单CMD默认范围不包含全部/system_ext/oplus/私有目录；
+不能把提取器“很全”说成绝不会漏掉新版本新增路径。
+
+4.2 关键文件名，不要用固定面板后缀筛掉其他屏。
+
+  /my_product/vendor/etc/display_apollo_list_*.xml
+  /my_product/vendor/etc/display_brightness_config_*.xml
+  display_brightness_config_common.xml、display_brightness_config_default.xml（按实际路径）
+  /my_product/vendor/etc/display_*.xml
+  /my_product/vendor/etc/multimedia_display_*.xml
+  /odm/etc/display/cwb_weightspos.json 以及其他含cwb_weights的JSON。
+
+  /vendor/lib64/libsdmcore.so
+  /vendor/lib64/libdemura_oem_plugin.so             存在时
+  /vendor/lib64/libcwb_qcom_aidl.so                 存在时
+  /vendor/lib64/libsdmclient.so                    CWB/SDM调用对照，存在时
+  /system/lib64/libcwb_client.so                    按官方实际路径
+  vendor.oplus.hardware.cwb@1.0.so
+  vendor.oplus.hardware.cwb-V2-ndk.so
+  vendor.oplus.hardware.displaypanelfeature@1.0.so
+  一加Fusion所在的sensorservice扩展库，以及它的NEEDED依赖。
+
+调色与服务声明另外核对：
+  /odm/etc/display/qdcm_calib_data_*.json
+  /odm/etc/dolby/display/dolby_vision.cfg
+  /my_product/etc/dolby_vision.cfg、/vendor/etc/dolby_vision.cfg（实际存在处）
+  /odm/etc/vintf/manifest/manifest_oplus_cwb_aidl.xml（名字按实际包）
+  /system_ext/etc/sensor/oplus_sys_sensor_config.xml
+  /system_ext/oplus/sys_sensor_config.xml
+  /system_ext/lib64/libsensorserviceextimpl.so（实际存在时）
+  /system_ext/etc/display_brightness_config_default.xml、common.xml（按实际名字）
+参考材料提全不等于这些文件全部覆盖到目标，尤其不能复制别机屏幕的QDCM或persist。
+
+每份 build.prop、etc/build.prop、相关my_*属性都保留。
+保存boot/vendor_boot/init_boot/dtbo与dlkm素材有助于对齐KMI，不要仅存一份Image。
+SystemUI、Settings APK及split APK用于查亮度条；以pm path实际返回为准。
+如果材料只能压缩采集，保留原路径清单，不把全部SO混在一个平铺文件夹。
+
+4.3 电脑单CMD取材。
+
+工具：E:\MIO\tools\MioDisplayExtractor\MIO_Display_Extractor.cmd
+可把这个单文件发给提供官方包的人，不要求他安装Java、Python、ADB或管理员权限。
+
+操作：
+  1. 将CMD放在一个可写目录。
+  2. 双击，输入已经解包的ROM根目录，如：
+       E:\MIO\OP13T_ColorOS16_Official
+  3. 根目录应直接有system、vendor、odm、my_product等分区。
+  4. 等待生成 Output\MIO_Display_时间_随机后缀.zip。
+  5. 一并保留输出文件夹、FILE_LIST.csv、EXTRACTION_MANIFEST.json、缺项记录。
+  6. 检查上面提到的额外私有路径，必要时补一份目录。
+
+MIO/DNA常见映射：
+  ROM\system\system\etc\a.json  -> 真机 /system/etc/a.json
+  ROM\vendor\etc\a.json        -> 真机 /vendor/etc/a.json
+  ROM\my_product\etc\a.json    -> 真机 /my_product/etc/a.json
+其他分区通常没有system那样的双层。平铺system\etc也支持。
+
+该工具只读原ROM，跳过链接/联接点，使用新的输出目录。
+已用假目录、中文、空格、[]、&、外围引号、缺项、两种system布局和ZIP内容做测试。
+现存TEST_RESULT.txt记录单CMD实际启动/交互等168项断言通过。
+大范围库素材可能几GB，需要同时容纳复制目录和ZIP。
+不提用户data、相册、账号、persist；也不能从解包推导真实运行时面板ID或当前标签。
+
+=============================================================================
+05. OriginOS 目标：提取需要的原生消费者
+=============================================================================
+
+5.1 目标配置整目录。
+
+  /system/etc/LcmConfig/
+  /system/etc/SensorConfig/
+  /vendor/etc/vivo_config.ini
+  /vendor/etc/vivo_config_*.ini                      所有已有SKU变体
+  /system/etc/displayconfig/                        有则取
+  /product/etc/displayconfig/                       有则取
+  /vendor/etc/displayconfig/                        有则取
+
+不要假设只改vivo_config.ini基础文件就一定被选中，ConfigStore可能先选择SKU版。
+
+5.2 框架和必要库。
+
+  /system/framework/framework.jar
+  /system/framework/services.jar
+  /system/framework/vivo-framework.jar
+  /system/framework/vivo-services.jar
+  /system/framework/framework-res.apk
+  /system/framework/vivo-res.apk                    有则取
+相同名称若在/system_ext/framework，以实际路径为准；必要时附oat/arm64 odex/vdex。
+
+  /system/bin/surfaceflinger
+  /system/lib64/libgui.so
+  /system/lib64/libui.so
+  /system/lib64/libsensorservice.so
+  /system/lib64/libsensorservice_ex.so              与后续BC05分派有关，实际系统有则必须取
+  /system/lib64/libsensorcompat_ovsc.so             有则保留，不能被旧包覆盖
+  /system/lib64/libsensor.so                        有则取
+  /system/lib64/vivo.sensor.cwbnotify-V1-ndk.so      有则取
+  /system/lib64/、/system_ext/lib64/中的相关vivo/sensor/cwb/dolby/dovi/renderengine库。
+
+补取当前vendor的小子集，以便分清“套错vendor”和“框架自身硬编码”：
+  libsdmcore.so、libdemura_oem_plugin.so、libcwb_qcom_aidl.so、libhwcsensor.so（有则取）。
+  全部分区build.prop与显示相关的实际修改说明。
+
+只为了本教程基础亮度生成，不要求另把整套Vivo vendor/odm替换到一加。
+参考Vivo官方是为了读结构/逻辑/默认属性，不是给一加驱动换硬件校准。
+
+5.3 单SH从已经刷入的目标系统提取。
+
+工具：E:\MIO\tools\MioDisplayExtractor\OriginOS_Target_Collect.sh
+另有已交付副本：C:\Users\a1510\Videos\OriginOS_Target_Collect.sh。
+
+在电脑PowerShell示例（将SERIAL换成该手机序列号）：
+  adb -s SERIAL push OriginOS_Target_Collect.sh /sdcard/OriginOS_Target_Collect.sh
+  adb -s SERIAL shell su -c 'sh /sdcard/OriginOS_Target_Collect.sh'
+
+它会打印生成的 /sdcard/OriginOS_Target_时间_进程号.tar.gz 路径。
+再用 adb -s SERIAL pull 完整输出路径拉到电脑。
+可加 --no-runtime 只取文件；通常建议保留一次运行状态。
+真机路径是/system/lib64，不是/system/system/lib64。
+这是有限取材，不是常驻采集服务，不会改系统亮度、注册光感或写SSC。
+该脚本读取当前活动系统：有模块覆盖时可能采到改件，不自动寻找/data/DNA原包。
+metadata/SOURCE_PERMISSIONS_LABELS.txt记录源DAC和SELinux标签，留作打包元数据依据。
+已有假Android根测试与真机228文件采集记录，但不保证未来OEM新增目录自动收齐。
+必要文件缺失看MISSING/COPY_ERRORS等记录，不能将“脚本结束”当成所有文件都存在。
+如新版实际libsensorservice_ex位置不在既有匹配范围，按实际路径补取。
+
+5.4 DSU与/data/DNA。
+
+DSU里看不到/data/DNA，不说明原材料被删除。可能主系统和DSU的数据视图不同。
+需要时回主系统读取DNA解包；目标运行日志仍必须在目标OriginOS下获取。
+在ColorOS抓到的SF/传感器，不能冒充OriginOS对应文件。
+每次提取开头都保存ro.gsid.image_running、fingerprint和时间。
+
+=============================================================================
+06. 真机确认：不要凭伪装机型选择配置
+=============================================================================
+
+6.1 先抓只读基线。
+
+  adb devices -l
+  adb -s SERIAL shell getprop ro.gsid.image_running
+  adb -s SERIAL shell getprop ro.build.fingerprint
+  adb -s SERIAL shell getprop ro.vendor.build.fingerprint
+  adb -s SERIAL shell getprop ro.boot.slot_suffix
+  adb -s SERIAL shell uname -a
+  adb -s SERIAL shell dumpsys display
+  adb -s SERIAL shell dumpsys sensorservice
+  adb -s SERIAL shell dumpsys SurfaceFlinger
+  adb -s SERIAL shell wm size
+  adb -s SERIAL shell wm density
+  adb -s SERIAL shell dumpsys power
+  adb -s SERIAL shell cmd overlay list
+
+抓取结果按“系统＋分辨率＋场景＋时间”分文件。
+如果电脑写文件用PowerShell重定向，注意工具输出的编码；源码/配置按UTF-8读取。
+
+6.2 面板与亮度域。
+
+显示ID从dumpsys display获取；另结合SF/HWC面板信息和一加官方配置名称关联。
+Display ID不是Project ID，不是面板P_7/P_8，也不是把product里的文件名随便改一下即可。
+读brightness/max_brightness，按本机实际节点定位。
+OP13本轮路径例子：
+  /sys/devices/platform/soc/ae00000.qcom,mdss_mdp/backlight/panel0-backlight/brightness
+  /sys/kernel/oplus_display/
+  /sys/lcm/
+
+其他机型的控制器地址、backlight名称可能变化，不要把ae00000路径写死成通用路径。
+节点存在、标签、DAC、进程SELinux授权、内核handler行为都要分别看。
+一次只读ls -lZ、cat和日志足够起步；不要先用echo强制写4094来“证明HBM”。
+
+6.3 原生库是否真在用。
+
+分别查PID，不能假定一次pidof多个名字的输出顺序与参数顺序一样：
+  pidof system_server
+  pidof surfaceflinger
+  pidof vendor.qti.hardware.display.composer-service
+
+root读取/proc/对应PID/maps、mountinfo，以及/proc/对应PID/root/下目标文件。
+既要看真实进程视图，又要看模块目录；ADB shell看见文件不代表SF/system_server看见同一份。
+同名库从APEX、vendor namespace或别的模块加载时，单看/system/lib64文件不够。
+对新私有进程偏移，一律从该次运行文件定位，不能沿用重启前PID和不同版本布局。
+
+6.4 改机型和双面板。
+
+本机实际PJZ110/project23821，显示为别的机型只是伪装。
+必要时可增加伪装型号的选择别名，但别名指向真实硬件的数据，不换成另一个面板校准。
+同为京东方、同属一加13、外形相同，不保证两个批次所有参数逐项相等。
+先比较官方表；相同映射可合并面板名字，映射不同必须选择真实面板。
+
+=============================================================================
+07. 亮度配置转换：把标尺对齐，不是改一个max
+=============================================================================
+
+7.1 为什么Demo1/Config Only不够。
+
+早期目标仍有Vivo硬件的14261/15415等数字域，普通条只能约3000，
+阳光下到3515又掉下来，且HBM链路没有完整进入。
+把上限JSON改成4094只能解决一层，底层传输、光线分派、内核ABI和选择器仍可能失效。
+
+7.2 一加官方表如何关联。
+
+先从本机Fusion CommonConfig读取：
+  NormalModeBrightnessMax、BrightnessMax、ScreenResolution、ScreenShotRect、Project。
+
+再找：
+  display_apollo_list_实际面板名.xml
+  display_brightness_config_P_实际编号.xml
+  公共brightness配置里该面板指定的lux_table_mode、hbm_lux_table_mode。
+
+Apollo表可能每行有十个字段，物理DBV与逻辑索引不同。
+本工具核对行索引、物理列和端点，建立每个物理DBV对应nit的稠密表。
+一加Apollo逻辑最大值使用真实表关系，而不是把表所有索引当成4094域。
+本工具读取的关系：logicalMax = hardwareMax + normalLogical - normalPhysical。
+这只是已支持Apollo格式的解释；新版格式变了要重新研究，不能忽略校验强行生成。
+
+7.3 当前转换的主要OriginOS文件。
+
+  /system/etc/SensorConfig/SensorFrameworkConfig.json
+  /system/etc/SensorConfig/AutoBrightnessLcm2AgloBrLevel.json
+  /system/etc/SensorConfig/AutoBrightnessNitMapLcm.json
+  /system/etc/SensorConfig/dynamicBrightnessConfig.json           原有时
+  /system/etc/LcmConfig/LcmMapNit.json
+  /system/etc/LcmConfig/XdrBrightnessConfig.json
+  /system/etc/LcmConfig/LcmBrightnessConfig.json
+  /system/etc/LcmConfig/LcmSreConfig.json
+  /system/etc/LcmConfig/BrightnessPolicy.json                     原有时
+  /vendor/etc/vivo_config.ini
+  /vendor/etc/vivo_config_*.ini                                  原有SKU变体
+
+Aglo是该原文件名称中的拼写，别擅自修成Algo导致消费者找不到。
+基础文件、当前selector和所有已有同basename后缀要统一更新，比如_0x0版本。
+只改其中一份，另一份旧表可能在重启、切屏、SKU选择或fallback时重新生效。
+
+7.4 转换要点。
+
+  - SensorFramework的普通最大值按一加normal，而不是默认峰值。
+  - AutoBrightness算法域和LCM域成对转换，保留普通曲线形状/滤波语义。
+  - 最小值、特殊最小值和动态亮度上限一起转换。
+  - Vivo legacy XDR与unified两条消费路径都对齐，不能只改其中一个panel数组。
+  - nit映射单调，索引与数组长度一致，普通端点和峰值端点对应一加表。
+  - Battery/package/dark/app/control等限制字段也要转换到新标尺。
+  - 保留目标schema和Version，不拿另一Vivo机型整个JSON盲盖。
+  - 遇到不同面板真实映射，停止自动合并并人工选择。
+
+配置里的“标称798nit”不代表户外实测只能798nit，先分清普通、HBM、HDR及表的映射域。
+不能只凭屏幕看着很亮就把nit表改成宣传峰值。
+
+人工复刻或审计生成结果时，具体字段对照如下：
+
+  SensorFrameworkConfig*.json：MaxBrightness=normalMax。
+
+  AutoBrightnessLcm2AgloBrLevel*.json：
+    LcmMapAlgoBrLevel重新采样到一加普通DBV域；
+    AlgoMapLcmBrLevel的对应输出值一起缩放，sectionkeypoint不误当DBV缩放；
+    minBrightnessLevel、specialMinLcmLevel与同机minimum对齐。
+    现有Dre、_0x0、_0x000000a0等前缀变体均扫描，不限于一份基础JSON。
+    本版工具以基础模板统一这些变体，这是本轮实测目标的处理；
+    新ROM若变体有不同有效语义，须先分析选择器和消费者，不能一概覆盖。
+
+  AutoBrightnessNitMapLcm*.json：LcmMapNit只到normalMax，数据来自官方Apollo稠密表。
+
+  dynamicBrightnessConfig.json：存在时，dynamicBirghtnessNitParams各曲线末端
+    对齐一加普通端点的标称nit。Birghtness是原字段拼写，不随意纠正。
+
+  LcmMapNit.json：每个有效panel的config.normal_brightness_max、
+    config.hbm_brightness_max和lcm_map_nit成套一致。
+
+  LcmBrightnessConfig.json：panel内lcm_level_nit_map、brightness_config里的
+    normal_brightness_max、hbm_brightness_max、smooth_brightness_max同步转换；
+    brightness_set_by_filenode=false，走框架回调而非另一个文件写入路径。
+    smooth_brightness_max按旧截止nit反查一加表，不能直接复制旧DBV数字。
+
+  XdrBrightnessConfig.json：panel[]与顶层legacy入口同时更新xdr_config的
+    normal_brightness_max/hbm_brightness_max、brightness_luminance_map；
+    本轮生成的brightness_section清空，使新完整映射不被旧分段覆盖。
+    新schema对空数组语义有变化时先读消费者，不照抄。
+
+  BrightnessPolicy.json：只转换实际phone/oled配置。
+    actualPanelMaxNit、indoorMaxNitLimit、professionModeIndoorMaxNitLimit、
+    darkModeMaxNitLimit对齐普通nit端点；controlModeMaxNitLimit、
+    controlModeMaxNitLimitSpecial、appMaxNitLimit、appMaxNitLimitSpecial
+    各条目的maxNit也对齐，不能只改一个顶层值。
+
+生成器会补真实面板名及目标需要的panel_name=前缀别名、unknown fallback；
+SRE项目集合保留目标既有项并补当前PD工程选择。别名只解决选择问题，不创建新校准。
+不是凭手机伪装属性改用另一台机的亮度域。
+
+7.5 普通亮度条与自动学习。
+
+当前OriginOS路线没有照搬之前澎湃线性LSPosed模块。
+保持自动开关、控制中心与设置两处slider实际进入Vivo原生映射。
+Vivo会保留个性化/学习；强光时手动调暗可能留下新的用户调整，不是每次异常都来自挂载。
+验证时记录是否手动拖条、学习是否启用、自动开关和时间。
+清学习数据只用确认过的官方界面/接口，先备份，不无差别删除/data/system或数据库。
+
+本轮曾有明确记录：测试程序恢复过时的低brightness，被学习成lux10000→nit90，
+因此高lux也很暗。诊断时临时关闭自动亮度约4秒，确认运行对象的
+default_br/default_lux/default_slopeBr清空，再恢复原开关；没有删用户数据库。
+这只是该版引擎的诊断结果，不保证所有Vivo系统切开关都会清永久学习。
+新测试工具不要在结束时写回强光前的过时brightness或adjustment，防止再次制造学习。
+
+=============================================================================
+08. HBM/SRE：光线、框架、内核三处必须一致
+=============================================================================
+
+8.1 本轮两种政策。
+
+【官方分档】
+  从该面板的hbm_lux_table读取进入/退出、间隔和nit增量，逐档映射到物理DBV。
+  OP13某官方mode31有40000/20000、65000/40000等分段，随后还有更高档。
+  本轮取材完整进入/退出分段（lux）：
+    40000/20000，65000/40000，90000/65000，115000/90000，
+    140000/115000，150000/140000，160000/150000。
+  前四段gap约2500lux、每步约10标称nit；后续约2000lux/40标称nit。
+  gap是光照步长不是刷新周期；该样例约到16万lux才达到完整峰值，
+  8万lux不必等于4094。这些数值来自本轮供体，不是所有一加通用表。
+  所以“官方2万lux”要先分清进入还是退出，不能把所有机型的HBM写成2万进入。
+
+【用户定制full40k，当前工具默认】
+  40000 lux进入后直接该面板峰值；20000 lux退出；OP13就是4094。
+  这是用户选择，不是声称完整复刻官方分档。
+  仍保留目标已有防抖、电量和时限等字段；不是越过硬件保护强写4094。
+  Vivo原有防抖可能数秒，不能承诺因此一定达到ColorOS不到1秒的进入速度。
+  本轮目标保留的进入/退出防抖为2500/3500ms；其他版本读自己的字段。
+
+8.2 LcmSreConfig必须一起改的项。
+
+  transitionPoint、hdrBrightnessLimit。
+  hbmMap、hbmMap_auto。
+  hbmUpLuxLevel、hbmDownLuxLevel及对应_auto。
+  packagePolicy中的packageHbmMap、packageAutoHbmMap。
+  panel_name与当前project选择集合。
+  相关电量/峰值边界数字域。
+
+只改手动数组，自动或相册包仍可能回到Vivo旧标尺；只改自动也一样。
+
+本机full40k具体例子：
+  hbmMap=[3515,4094]，hbmMap_auto=[3515,4094]
+  hbmUpLuxLevel=[40000]，hbmUpLuxLevel_auto=[40000]
+  hbmDownLuxLevel=[20000]，hbmDownLuxLevel_auto=[20000]
+其他机型从normal/maximum生成数组，不把3515/4094硬编码为跨机型常量。
+
+本轮按用户要求移除的是“借用Vivo硬件的显示软件温控”，实际改动包括：
+  SRE panel删除typeTemperatureLimit；
+  LcmBrightnessConfig的xdr_config.temperature_limit_hdr_enable=false；
+  vivo_config.ini及已有SKU变体：
+
+    [vivo.software.brightness.policy]
+    hbm_bl_lvl=true
+    hbm_bl_diming=false
+    temperature_policy=0
+
+    [vivo.software.hbm.policy]
+    tmp_limit_policy=false
+    peak=false
+
+    [vivo.software.brightness.unified_mapping]
+    software_smooth_dimming=true
+
+这不是关闭一加内核/显示驱动/BMS的安全温控，也不删除其保护节点与函数。
+该选择属于本轮定制，不应以“修亮度必需”为理由给所有人的机器默认解除温控。
+新适配应重新评估相应软件限制，优先映射正确的硬件域并保留合理保护；
+不能用不可能触发的阈值掩盖真实过热或长时间4094的风险。
+
+8.3 标准lux分派。
+
+当前目标libsensorservice_ex.so原先的私有光感处理会影响SRE所收到的光照。
+已定位的故障是：App看到type5的几万lux，Vivo HBM却消费type66622 Light Policy Sensor；
+一加事件缺Vivo under-display私有字段，重复跑错配转换后策略内部lux变成近0。
+所以App高lux不证明HBM控制器也收到高lux，降低阈值并不是这次根治方法。
+BC05补丁在目标自己的函数中定位分派入口：
+  本轮函数VivoFusionImpl::processRealSensor，将标准有效lux接回LightPolicyFusion原滤波链。
+  有效标准光照交给已有Vivo滤波/生命周期；避免私有别名重复污染同一策略。
+  本机观察到标准handle1001、私有重复handle1701；新机必须查dumpsys和完整事件。
+  不把handle值改一下就当成所有HAL结构都兼容。
+  该分派不新增线程、不轮询节点；仍走已有事件。
+
+工具明确选sensor_mode=preserve时，不做该补丁。
+“保留传感器”是接受未适配缺口，不表示HBM光线通道已经修好。
+本轮13T某离线包正是preserve模式，必须在报告中注明。
+
+8.4 内核兼容层。
+
+仓库： https://github.com/Maga-King/Action-Build-AL1S
+源码： patches/originos/al1s_originos.c
+说明： patches/originos/BRIGHTNESS_ABI.txt
+
+亮度ABI新增五个主屏只读节点，权限0444：
+  /sys/lcm/bl_level                  一加驱动跟踪的请求DBV，不是DDIC直接测量
+  /sys/lcm/hbm_max_brightness        物理最大值
+  /sys/lcm/normal_max_brightness     一加普通最大值
+  /sys/lcm/oled_hbm                  一加全局HBM软件状态
+  /sys/lcm/al1s_bl_abi               ABI版本1
+
+保留原AL1S节点、AOD、指纹、demura、温度补偿、CWB与一加显示函数，不拆旧功能。
+没有伪造第二屏，不增加定时器/工作队列/轮询，也不是可写Vivo多级HBM命令接口。
+此前假的SRE/ORE兼容状态不是Vivo原始增强实现，不能拿“节点可读”当真SRE效果。
+
+配对userspace示例：
+  vivo.software.brightness.policy/hbm_bl_lvl=true
+  hbm_bl_diming=false
+  启用目标已有unified mapping，保持框架回调输出路径。
+
+不要改hbm_bl_lvl=false当兜底，它会选择legacy oled_hbm节点写入路线。
+这里的oled_hbm是新只读ABI，不能承接那些Vivo私有写命令。
+
+8.5 编译与部署。
+
+显示兼容编进msm_drm.ko；只刷Image/AnyKernel的kernel部分不保证换了早期加载的KO。
+正式KSU/KSUN都有加料开关，不是空壳；此前是部分新提交没带入正式分支。
+现已补入，KSU oneplus_13t_b与KSUN oneplus_13_b完整Actions成功。
+最终必须看所选机型manifest、平台、显示源码目录、DDK target和产物，不凭开关名字判断。
+
+只编KO可以：前提是同一个已保存FAST底座、配置、头文件、Module.symvers、KMI/编译环境。
+不能任意拿另一次Image配新KO，不能强改vermagic骗加载。
+不要热卸载正在工作的msm_drm；不要在线覆盖仍挂载的vendor_dlkm后假定安全。
+本轮是备份当前槽dlkm副本，替换匹配KO，按实际A/B槽在fastbootd刷分区并正常重启。
+具体分区刷法依赖设备，不提供通用盲刷命令。
+
+多机型构建还须审计scripts/al1s_build_display.sh与al1s_patch_vendor_dlkm.py：
+  按所选CPU/平台/BUILD_METHOD，从display_modules.bzl定位实际Oplus实现；
+  支持oplus/SM8750及旧版直接oplus/布局，但不能永远写死SM8750；
+  DDK目标按所选platform/variant生成，不能对所有机型强用sun/perf；
+  兼容层调用的Oplus函数逐项确认真实存在，缺失需适配，不猜“高通都有”。
+本次两条成功Actions实际都为SM8750，使用sun_perf_display_drivers_dist；
+这只能证明这两组选择正确，不能声称已测试仓库每个机型。
+
+Vivo SM8750公开内核含common/backlight基础，不代表公开了完整私有DSI/SRE驱动。
+兼容层是依据已提取OriginOS消费者和一加真实显示函数适配，不是假称复制了完整Vivo实现。
+
+=============================================================================
+09. 原生亮度传输：普通HDR和杜比为什么会一起坏
+=============================================================================
+
+9.1 问题不只在XML。
+
+Vivo SF原生亮度输入原先会检查一加composer不具备的Vivo私有能力。
+标准背光仍变化，但Vivo XDR内部base/target DBV没有更新，可能保持0。
+随后XDR把base过低当息屏/锁定，显示HDR/SDR的nit相同，看起来“没有分离”。
+输出侧又依赖Vivo私有HWC调用，一加composer没有配套服务时只是返回。
+强开输入能力位只能补一头，输出仍没送到一加显示HAL。
+
+9.2 最小原生修复。
+
+保留目标自身/system/bin/surfaceflinger，现场定位：
+  标准亮度输入门槛、DisplayBrightnessManager状态更新。
+  Vivo私有输出调用块和继续点。
+  目标现有DisplayDevice stageBrightness/persistBrightness等标准提交函数。
+  原生Apollo逆表、普通SDR上限、unified最大值和相关成员布局。
+
+先用一加Apollo逆映射，把物理DBV转换到实际逻辑亮度域，再归一化为标准0～1输出，
+走目标原有合成提交。不能简单fraction=DBV/4094或DBV/physicalMax。
+普通SDR fallback以上限normal为准，不能把峰值maximum当普通亮度条域。
+本轮错误归一化曾让非HDR在约5000lux就上4094、普通条拉满也4094，必须一起修。
+保持persistBrightness(true)等实际提交语义；改false清stage不是修复。
+不能将Vivo私有高位打包标志直接塞进一加标准背光参数。
+不添加SF外的root定时服务；不反复echo brightness来伪造效果。
+
+9.3 动态定位，不复制论文式十六进制地址。
+
+老研究记录里的0x5c6154等地址仅对应当时二进制，教程不把它们当操作配方。
+PD2620和PD2606有真实布局/调用点差异；另一个版本即使函数名字相同也需重新定位。
+当前工具用目标符号/指令结构确定每处入口、调用继续点、私有成员和可用段间空隙。
+遇到多个匹配、未知结构、无安全空间、依赖不符合，不可“选第一个继续”。
+补丁同时覆盖legacy与unified输出；保留负值息屏sentinel、最小值、寄存器/栈和调用约定。
+
+9.4 HDR验收。
+
+同一视频抓四种状态：SDR/退出、普通HDR10、杜比、前后台切换。
+观察：SF的HDR标志、displayBrightnessNits、sdrWhitePointNits、真实DBV、色彩mode、解码器。
+另外记录目标App和视频Surface的dataspace、位深、codec mime及实际解码器名。
+片名有HDR字样或按钮叫HDR10+，不证明当前decoder确实输出了对应metadata。
+只看到一个N/A不等于HDR不工作，可能App API或采样来源不适配；读取来源要标明。
+比率3.5证明某合成状态已分离，不证明面板绝对亮度与白点已经正确。
+视频播放、黑屏、整屏黄、后台绿紫、截图异常要分别分类。
+普通HDR也无分离时先查公共传输链，不只盯杜比RPU或dolby_vision.cfg。
+
+本轮“一加13 HDR实验室”源码在E:\MIO\op13_hdr_lab，包名local.mio.op13hdrlab。
+MainActivity用于视频/状态，LabTelemetry共用光感订阅，OverlayService为用户主动开的悬浮窗。
+读数优先Android公开HDR/SDR API；不可用时读取SF实际nit对象并标[SF]，
+不是把某个固定倍率写在UI上。App读/sys/lcm/oled_hbm作为全局HBM，不读指纹hbm冒充。
+
+注意诊断App与生产模块耗电不同：
+  App可见或用户开启悬浮窗且亮屏时，约1Hz刷新只读DBV/HBM/SF状态；
+  光感本身是事件订阅，UI更新频率不等于HAL上报频率；
+  最后App/悬浮窗客户端退出或息屏时取消订阅与周期读数；
+  功耗验收应关闭诊断悬浮窗，不能把App的root采样当生产库的永久轮询。
+当前主背光路径、CWB探针与部分ABI仍针对OP13，别机需从真实节点/ELF重新适配。
+HBM N/A只是节点缺失、读失败或未支持；它本身不能证明HBM没激发或一定是内核损坏。
+
+本地片源在app/src/main/assets/offline，tools/download_samples.py保留原HLS初始化段
+与有限未加密片段、不转码HDR metadata，并记录sources.json来源。
+已有杜比/HDR10+样本约数十秒；测试素材与下载脚本不是HDR10+/Vivid全格式支持保证。
+不要为下载失败添加特殊网络假设；优先保存合法可用本地片源并确认实际格式。
+
+=============================================================================
+10. 调色文件、路径和HDR图片
+=============================================================================
+
+10.1 保持两类问题分离。
+
+【套错硬件】本轮一加13一度用了13T的vendor/odm属性和镜像，需单独硬件恢复。
+【框架不匹配】OriginOS消费者仍假设Vivo能力/亮度域，即使用正确vendor也需要兼容。
+
+历史“13T display restore A”用于恢复一加13错套的硬件材料。
+真一加13T不应刷这个恢复A；一键工具也不提供通用vendor还原包。
+正确一加vendor/odm不是理由把整套Vivo vendor/odm复制过去。
+
+10.2 为什么/my_product文件存在却未必被读取。
+
+ColorOS显示库可能硬编码/my_product/vendor/etc/，目标没有挂载这个分区。
+解决要么正确建立早期路径，要么等长重定位“实际读该路径的库”。
+当前工具选择保留目标vendor显示库，只把其只读配置前缀重定位到：
+  /vendor/etc/cos_color/
+
+二进制字符串写作：
+  /vendor/etc/cos_color//
+双斜线是有意为之，使长度与/my_product/vendor/etc/相同，保持原字符串地址。
+路径引用者：本轮目标libsdmcore.so及libdemura_oem_plugin.so。
+早期mio_colors/op13_color命名已统一到cos_color；不能任意加长成Nyako_colors。
+若需要长名字，需要真正的字符串/引用重定位和ABI审计，不能简单覆盖后面的字节。
+
+10.3 配置来源。
+
+从实际机型官方/my_product/vendor/etc/复制display_*.xml、multimedia_display_*.xml等。
+不只挑一份以HDR命名的文件；面板普通、sun、HDR、视频、色彩模式等配套都查。
+文件权限/标签和最终打包config必须同时更新。
+不要把ColorOS libsdmcore全换成Vivo/小米版本后还声称私有功能完整保留。
+本工具只改目标库中的路径，不替换整个显示库群和ABI依赖。
+
+10.4 验证“被用到”，不能只验证“复制成功”。
+
+  - 确认进程实际加载的是已修改libsdmcore/demura。
+  - 核对该库所有相关只读路径引用与配置后缀。
+  - 查消费者初始化/解析日志、对应模式运行状态。
+  - 有条件用有限只读探针查看配置对象，或合法trace实际文件打开。
+  - /proc/fd没看到不等于未读，解析后可能立即关闭。
+  - 单个XML出现在模块目录、单个dlopen成功不能证明所有色准表都生效。
+
+10.5 QDCM与Render Intent：整屏黄不能只怪亮度表。
+
+同一个私有intent编号在Vivo与一加可能完全不同：本轮OP13的308是EnhanceP3 SDR，
+309/310分别为杜比D65/D73，而目标Vivo消费者对308可能有HDR用途。
+把目标编号原样发到一加HWC，可能走错误调色模式；不能只把nit拉开就算色彩也修好。
+
+生成器intents.py从官方qdcm_calib_data_*.json的Applicability读取：
+  ColorPrimaries=P3、RenderIntentName、RenderIntent。
+按真实名称定位普通HDR及Dolby D65/D73，检查全部面板是否一致；缺项/歧义拒绝生成。
+在目标自己的SF颜色模式选择入口接入实际P3 intents，与亮度输入/输出一起适配。
+新机不可硬套308/309/310，更不能用Vivo QDCM LUT替换一加真实面板校准。
+
+本轮还查到ColorOS DolbyRenderer有/my_product/lib64的独立namespace与5.0 effect调用。
+它与/vendor/etc/cos_color/的XML路径是不同链路；调色XML已读不证明Renderer也已接通。
+不整套覆盖libgui、RenderEngine、libhwui或ColorOS SF来赌私有ABI相同。
+面板播放色彩、全屏UI白点、HDR截图转SDR、后台缩略图要分别记录和验收。
+肉眼偏色消失不等于有色度计验证，更不能把绿色天空截图当正常面板效果。
+
+10.6 HDR图片与fp16补充。
+
+本轮另整理过橘子HDR图片参考：
+  vendor.display.force_tonemapping=1
+  vendor.display.enable_hdr10_gpu_target=1
+  vendor.display.disable_fp16_support=0
+  vendor.display.tonemap.hdr_version=1
+  debug.renderengine.graphite=true
+
+  /vendor/etc/vivo_config.ini 的 [vivo.hardware.display.xdr] 段：
+  fp16=true
+
+以上是该次对照材料与补充记录，不是任意OriginOS版本五个属性全加的万能配方。
+尤其force_tonemapping可能是一加原有项，gpu_target/Graphite和目标渲染实现相关。
+新的机型/版本先比对自己的官方vendor及目标Vivo默认值，再A/B验证HDR图片和视频。
+已有同键先替换，不能制造重复prop或重复INI段；tool不会自动替你修改全部属性。
+
+杜比音效、音频解码器、录像编码器与显示问题分开；本亮度工具不改它们。
+播放测试优先本地片源，避免把网络卡顿/下载失败当成HDR解码或面板故障。
+
+=============================================================================
+11. HDR UI、密码解锁跳亮和AOD
+=============================================================================
+
+11.1 本轮关闭Vivo HDR UI的属性。
+
+  ro.vendor.vivo.hardware.display.xdr:hdrui=false
+
+注意中间是冒号。放模块system.prop或正确vendor属性文件，正常重启后生效。
+它不是“关闭所有视频HDR”的全局XDR开关。
+当时关该项后用户反馈跳亮消失，但SF内部mXdrUiSupport仍为true，
+因此不能宣布所有HDR UI内部能力标志/路径都被移除。
+
+11.2 临时全局XDR定位与永久UI控制不同。
+
+Vivo SF有--lcm-feature --brightness等调试接口，帮助中存在-xdr-enable/-xdr-bypass。
+早期用全局关闭XDR作A/B时，视频HDR增亮也会停，应记录原值并测试后恢复。
+调试命令只用于当前OriginOS，别在ColorOS主系统按Vivo私有接口乱执行。
+本教程不把临时全局关闭当成保留HDR的视频方案。
+
+11.3 解锁瞬间立即息屏卡一下是独立问题。
+
+触光关闭后跳亮/闪屏仍有，说明不能只归因于触光。
+关全局XDR可影响AOD闪屏，但密码解锁瞬间立即息屏的停顿不一定同因。
+用户观察到锁屏有AOD衔接、普通App页面息屏可能只有一段；解锁状态同步可能存在窗口。
+这是有依据的方向，但不能把观察写成整个动画状态机已完全修复。
+
+本轮研究过vivo_keyguard_newaod_animtime，曾将1000ms改短作A/B，之后恢复1秒对照。
+不要把缩短动画时间当成修正丢失锁屏时钟/图层的根本修复。
+不修改用户不在当前范围内的锁屏/AOD设置来凑亮度测试结果。
+
+=============================================================================
+12. CWB与屏下光感补偿：实际实现
+=============================================================================
+
+12.1 先理解为何白页面会让自动亮度继续上升。
+
+屏下ALS会看见环境光与屏幕漏光。若屏幕变白→原始lux增大→自动亮度再提高，
+就可能形成误升亮反馈；只抬HBM阈值或改普通曲线不是完整修复。
+必须用正确取色区、DBV、RGBC、工厂校准和时间窗口估算漏光。
+摄像头开孔位置不一定是ALS位置；不能凭外观把取色块放摄像头边。
+
+12.2 现有普通CWB数据流。
+
+  本机物理ALS完整包
+    → 保留原始包不改，建立相同timestamp/lease的局部副本
+    → 官方CWB客户端返回ROI RGB＋起止时间
+    → SSC记录对应序号/时窗，匹配一组传感器积分样本
+    → 用本机W_VIEW工厂校准与官方V2.1系数算漏光
+    → 只改标准光感副本的lux
+    → 已修复的Vivo lux分派/滤波/自动亮度/SRE继续消费。
+
+这里不直接控制背光，不向App显示一个假的lux来冒充系统已用。
+
+12.3 OP13的完整原始包与alias。
+
+本机物理handle0x6a5/type33171070，标准alias0x3e9/type5，也观察到私有type66551。
+本机events结构104字节，含积分时间、DBV、RGBC、模式/算法、hall与打包序号。
+本例timestamp在16字节偏移，16个float数据从24字节开始：
+  data[0]=lux；[1]=积分ms；[2]=模式位（bit1为DC）；[3]=DBV；
+  [4..7]=RGBC；[8]=算法；[9]=hall；[15]=序号/标志打包值。
+本例data[15]是float数值承载的整数打包值：先检查有限值和范围，再按官方行为转整数取位；
+不是将float的IEEE754原始位reinterpret成uint32。其他事件字段按自己的真实ABI解析。
+仅用标准alias最初只剩lux，完整字段已被HAL派生链路丢掉，无法正确补偿。
+v4采用原始完整包的局部副本，按严格相同时间戳＋订阅代际关联到标准副本。
+缓存固定32条；不匹配就不改，不以“相差几毫秒也差不多”模糊匹配。
+同一原始包重复交付不重复喂五样本选择器；原物理包与系统原缓存不修改。
+
+这些handle、type、104B结构是本机实测ABI，不是所有一加机型的通用常量。
+新机必须从dumpsys、HAL和事件代码重新确认字段语义和丢字段发生的位置。
+
+12.4 校准不能拿别人的。
+
+读取本机运行时sensor feature服务的工厂数据，使用W_VIEW_R/G/B/C_0..8。
+本机通过已审计AIDL ISensorFeature transaction2读取；新ABI重新查。
+donor profile提供golden/系数，不提供替换另一台手机的persist/W_VIEW。
+缺失、非有限、非正值或字段错误时保留原lux，不伪造一个通用校准值。
+
+12.5 取色客户端与SSC时序。
+
+使用官方libcwb_client及CWB AIDL/HIDL依赖，设主屏类型，ROI按官方profile。
+本轮取色Record为40字节，包含RGB和开始/结束时间等，不能只读前三个颜色数值。
+客户端官方默认值可能50ms，必须按本机profile设置；本轮官方CWB周期250ms。
+回调内只拷数据、通知条件变量，不反调官方client，避免持锁死锁。
+工作线程负责已有控制和SSC参数；闲置时条件变量休眠，不加每秒检查节点的循环。
+
+本轮SSC格式：start,end,sequence,0；末位0表示CWB，SF应为1。
+运行时本机服务vendor.oplus.hardware.oplusSensor.ISensorFeature/default；
+校准取transaction2，SSC参数上报取transaction8；其他服务版本重新按真实IDL/ELF确认。
+不要在官方主系统Fusion已经写SSC时再运行另一个候选写入器，两个客户端会互相覆盖。
+序号不是任意计时器时间；截图时窗要和光感积分起点/长度一致。
+匹配计算有60/90Hz delay、四位截断阈值与五样本选择逻辑，不能用肉眼凑延迟。
+
+完整包打包字段：
+  bit16=latest，bit17=forced report，bit18=factory。
+  pending的官方判断是packed<65536，不是把bit17叫pending。
+  普通非最新包可保持最近有效补偿；不按固定几秒超时就换回raw lux。
+  新租约/模式切换要清旧状态，避免错误旧值跨亮屏或DC使用。
+
+12.6 不使用root进程假冒系统服务。
+
+补偿库通过目标libsensorservice依赖在真实system_server中使用。
+不要独立su启动同名sensorservice做生产集成；本轮曾误启动一次探针进程，
+替换了查询注册，之后结束该精确进程并经允许重启恢复干净状态。
+它不能作为检测CWB的日常动作。
+
+接口前提、标准订阅、SELinux、maps和真实计算计数都要验证。
+root探针能调用成功，不证明system_server域和生命周期都正确。
+
+12.7 v1→v5的关键教训。
+
+  v1：patchelf搬了DT_STRTAB；已有OVSC扫描边界假设被破坏，卡开机。
+  v2：不移动元数据，只加短依赖nc.so，系统能开机；但只接HIDL停止路径不够。
+  v3：同时接现场定位的AIDL/HIDL activate；本机实际AIDL，订阅才能正确开启。
+  v4：标准alias丢完整字段，改用完整原包与精确事件副本关联。
+  v5：FHD下CWB原生输出与分配尺寸错位，修主屏原生缓冲尺寸，见下一章。
+
+短名nc.so是复用该目标ELF已验证六字节字符串空隙。
+复用冗余DT_FLAGS_1=NOW槽位，保留原DT_FLAGS=BIND_NOW与NEEDED依赖顺序。
+不移动.dynsym/.dynstr地址、PLT、重定位或原.text，保留原OVSC库。
+另一个ELF没有相同安全空隙/冗余槽位就不能硬加，需另作加载方案。
+
+=============================================================================
+13. 分辨率、LTPO、旋转、DC与FOD
+=============================================================================
+
+13.1 OP13的FHD问题实质。
+
+QHD原生CWB ROI是1010,148—1048,190（右/下界不含），38×42=1596像素。
+FHD显示1080×2376时，硬件取色仍在原生QHD坐标空间。
+按FHD尺寸分配却接收原生取色块，曾令正确色块落在缓冲左上角；
+官方算法仍按ROI坐标读，读成黑色。
+
+v5只在libcwb_qcom_aidl.so的prepareCwbBuffer主屏分配加载处，
+定位一处4字节指令＋8字节常量，分配保持1440×3168。
+只读LOAD延长8字节，不搬ELF表，不改副屏、不强制用户系统为QHD。
+FHD缓冲约增加5MB；没提高采样频率，但这不等于实际耗电已测定。
+
+其他机型不能把1440×3168原样抄过去。
+现有patch_cwb_buffer.py明确仅接受已研究的OP13原生1440×3168与该函数结构；
+它不是多机型自动修复器。改一个常量并不等于另一机型ABI已经通过审计。
+确认它的硬件输出空间、stride、ROI位置、缓冲实际像素布局，再决定需不需要同类修复。
+如果设备原本就与显示模式一致，不应为了“照教程”强锁原生尺寸。
+
+官方还有整数Rect与归一化FloatRect两种取色入口。
+本轮ro.vendor.oplus.display.cwb.res_switch_type默认-1或1且参考尺寸有效时走FloatRect；
+坐标打包交vendor结合旋转还原。Main_1_1/1_2/1_3不是三份“分辨率专用配置”，
+本轮这些公共参考尺寸/ROI一致。仅改FloatRect没有修复上述底层缓冲布局问题。
+screenhole.position描述开孔，不能把它直接替代ALS ROI；相关prop先查实际消费者。
+
+13.2 普通色块实测与FHD边缘混色。
+
+测试App把小色块放官方ROI，其他区域白色，并提供异位对照。
+FHD缩放有边缘混色，本轮红255,13,13、绿14,255,14、蓝13,13,255。
+QHD蓝0,0,255，原始1596像素全蓝，说明不是“绿色偏移成蓝”等错误。
+不要求FHD所有分量必须与QHD逐数值相同，应同时看像素位置和缩放边缘。
+
+13.3 LTPO和缓存不能误判。
+
+静止画面无新像素写入，buffer_age增长可以是正常缓存复用。
+官方仍可延展同色有效结束时间，回调/补偿继续推进，不必新捕获完整画面。
+只凭“RGB不变”或“缓存几十秒旧”不能说服务没起来。
+切五种颜色看是否跟随，再看回调、计算、时窗、原始ROI像素和模式。
+快照不是原子操作，切色瞬间旧缓存与新回调不同要隔几秒复查。
+
+13.4 息屏/订阅策略。
+
+有有效标准光感租约且DBV表明亮屏才使用取色；最后租约关闭或DBV0时停止。
+不额外常驻一个App来维持光感，不用定时亮屏检查。
+最新研发源码还把DBV1按官方归为off，同步清history/held值，并忽略停止后的迟到回调。
+快速off/on可能赶在异步worker真正停前发生，因此不能只在异步stop完成后清缓存。
+最新单测通过，但这部分尚未在当前v5上线，不应混淆版本。
+
+13.5 旋转。
+
+系统强制横屏会影响目标未适配的UI，本轮曾出现抽风，已恢复。
+不要把强制横屏当常态验收；测试前保存rotation设置，异常立即恢复。
+有官方旋转实现的版本要核对取色矩形旋转、实际缓冲布局和显示override。
+逻辑屏幕尺寸、物理HWC配置、硬件CWB尺寸是三件不同的事。
+
+13.6 官方DC/FOD并未完成。
+
+本机profile FODForceSFScreenShotSupported=true；DC位变化时官方可以改走SF。
+普通CWB仍有RGB回调，不意味着DC算法也在计算。
+本轮v5在DC模式保留未经此分支验证的原lux，不能冒充已按普通式正确补偿。
+低亮度窗口DBV降到392时仍dc=0，不能将“测了低亮度”写成“测了DC”。
+
+正式SF兼容需至少补齐：
+  有画面更新时的ROI捕获、无更新时缓存复用。
+  实际显示颜色矩阵、官方非线性LUT和纯色分类。
+  capture/present fence关联有效时间与光感积分。
+  官方CWB/SF选择、SSC末位标记、停止/恢复和模式切换。
+不能用固定250ms全屏截图替代，不能并行常开两个后端后声称功耗等同官方。
+
+目前有限sf_roi_probe只抓小ROI，供诊断；identity矩阵显式标为诊断，
+不是正式后台截图生产后端，也不主动接管系统传感器。
+Vivo RegionSamplingListener主要返回亮度，不能当作RGB回调；同亮度换色可能不触发。
+已查的旧OPPO SF查询22002/监听24002在目标Vivo SF被凭据门禁返回-1，
+加SELinux allow不能凭空实现该接口，须补真实生产路径而不是反复强调权限。
+
+=============================================================================
+14. SELinux、权限与固化CIL
+=============================================================================
+
+14.1 先读实际标签和AVC。
+
+本轮真实标签：
+  /sys/kernel/oplus_display/相关HBM节点  sysfs_graphics_ffl
+  aod_light_mode_set                   oppo_log_sysfs
+  dim_alpha、dim_dc_alpha              alpha_sysfs
+  /sys/lcm/oled_hbm                    以实际sysfs/genfscon为准，核对是否sysfs_oled_hbm
+
+给路径下所有文件chmod777、随便chcon、全局permissive都不是通用修复。
+SELinux allow按类型和进程域，不按路径前缀；同标签其他节点也会得到对应授权。
+DAC属主/权限与SELinux分别生效，root:root 0644的节点不会仅加allow就让system用户能写。
+只读ABI维持0444，不应改成可写给Vivolegacy命令用。
+
+14.2 基础亮度只读CIL范例。
+
+  (allow system_server sysfs (dir (getattr open read search)))
+  (allow system_server sysfs (file (getattr open read)))
+  (allow system_server sysfs_oled_hbm (file (getattr open read)))
+
+把sysfs_oled_hbm这个文件对象类型标成typepermissive，不能替代system_server进程域授权。
+新设备必须确认该类型和genfscon标签真实存在，不新建一个没有对象对应的空类型。
+
+14.3 后续CWB与显示权限。
+
+当前完整范例：
+  E:\MIO\cwb_compensation_20261004\module_files\sepolicy.rule
+  同目录display_nodes.cil、user_additions.cil。
+
+CWB要求实际system_server对所用CWB/sensor service的find和Binder访问；
+现有生命周期trampoline实现还需要execmem/对应库execmod，这会扩大攻击面，
+只在这套实现确实需要时使用，不把它当所有亮度修复必加权限。
+
+显示节点本轮授予init、vendor_init、system_server、surfaceflinger、
+hal_graphics_composer_default对三种已知类型的dir读/搜索、file读写。
+实际AVC又发现hal_fingerprint_oppo缺sysfs_graphics_ffl目录search，单独补齐。
+当时黑屏现场：框架Awake/ON、目标DBV2187，但实际背光0；内核仍处指纹HBM并
+filter backlight，init按nroc.rc向hbm写0报Permission denied。
+这是退出路径被挡，不是Vivo自动曲线算出了0，也不是全局oled_hbm读值可代替诊断。
+本轮没有新给所有sysfs写权限，也没有全局typepermissive或随意给所有HAL写显示节点。
+
+用户额外CIL已去重转14行rule，保留原始完整权限；截断/缺class片段不猜测补全。
+property类型file write不等于property_service set，不能自动扩大成设置属性权限。
+这些相机/指纹/信任服务的额外规则不是跨机型自动亮度必选，见源文件按需选择。
+
+14.4 模块规则与固化不同。
+
+Magisk/KernelSU模块使用sepolicy.rule：
+  allow system_server sysfs_oled_hbm file { getattr open read }
+
+系统固化使用CIL：
+  (allow system_server sysfs_oled_hbm (file (getattr open read)))
+
+把*.cil或sepolicy.rule作为普通文本复制到系统不会自动生效。
+固化必须合并目标完整策略链并真实secilc编译，同时处理原有预编译缓存。
+正常/debug/vivo-debug等分支按目标现有布局处理。
+预编译策略可能在vendor或odm，不能只改CIL而继续加载旧precompiled_sepolicy。
+平台mapping hash不是任意删掉；本工具在修改vendor规则时保留匹配的平台sidecar。
+策略输入包括system plat/mapping、system_ext、product、vendor plat_pub_versioned/vendor
+及odm已有输入。只重打system/vendor，不代表编译时可省掉product/system_ext完整策略。
+本工具使用secilc -m -M true -G -N -c <目标policy版本>，真实编译可解析/链接；
+-N禁用neverallow检查，报告明确记录，不能写成“完整neverallow安全审计通过”。
+
+14.5 文件权限/标签范例。
+
+  /system/bin/surfaceflinger        0:2000 0755 surfaceflinger_exec（最终工具规格）
+  /system/lib64/*.so                0:0    0644 system_lib_file
+  /vendor/lib64/*.so                0:0    0644 vendor_file
+  /vendor/etc/cos_color/*.xml       0:0    0644 vendor_configs_file
+  普通system配置                   0:0    0644 system_file
+  新目录通常0755，类型按所属路径和当前ROM原有上下文。
+
+旧测试包曾有SF 0:0脚本规格，最终打包以当前目标和PERMISSIONS.txt为准，
+不能把历史规格当成所有版本统一值。
+Windows不保存AndroidSELinux xattr：镜像标签必须写入config/*_file_contexts。
+还要更新*_fs_config属主权限，保持当前解包原有列格式/双层system命名。
+编译/匹配检查配置格式，不保留重复精确条目和错误转义。
+
+=============================================================================
+15. 双ROM PATCH工具
+=============================================================================
+
+源码：E:\MIO\tools\OplusOriginPatcher
+对应仓库： https://github.com/Maga-King/OriginOS-OnePlus-Brightness-Patcher
+现有完整资料ZIP：
+  C:\Users\a1510\Videos\MIO_OriginOS_Brightness_HDR_Patcher_20261004_完整资料.zip
+工具README版本1.0.2；旧资料/打包时间不能替代读取实际README及报告。
+
+15.1 GUI操作。
+
+  1. 保留完整原件副本，解压工具。
+  2. 第一框选已做基础修复、要修改的OriginOS解包根目录。
+  3. 第二框选该物理机型的官方ColorOS16解包根目录。
+  4. 扫描面板。多面板不同映射必须选择；相同映射只合并别名。
+  5. 选择官方HBM分档，或full40k用户定制。
+  6. 有已支持sensorservice_ex就用分派patch；没有时明确preserve并注明缺口。
+  7. 有完整策略链选compile；自行负责策略时选rules-only。
+  8. PATCH；等生成报告、权限、备份和需要重打的分区。
+  9. 用更新后的config打包，不继续用旧fs_config/file_contexts。
+
+工具只修改第一份解包，官方包只读；不刷分区、不安装模块、不执行gsi_tool、不重启。
+不要求第三个框选Vivo vendor/odm：基础移植用到的配套本来就应存在目标里。
+
+15.2 命令行。
+
+  python -m pip install -r requirements.txt
+  python patcher.py --originos "E:\ROM\OriginOS_Port" --coloros "E:\ROM\OP13_ColorOS16" --hbm full40k
+
+官方HBM分档例子：
+  python patcher.py --originos "E:\ROM\OriginOS_Port" --coloros "E:\ROM\OP13_ColorOS16" --hbm official
+
+暂不支持的传感器扩展库，明确保留并只导出策略：
+  python patcher.py --originos "E:\ROM\OriginOS_Port" --coloros "E:\ROM\OP13_ColorOS16" --sensor-mode preserve --cil-mode rules-only
+该选择不保证HBM实际lux或CWB已修，只允许其他已支持环节先生成。
+
+其他选项以 python patcher.py --help 为准，别手猜某个GUI选项的CLI名字。
+源码运行可python app.py；重新打包EXE使用Build-Windows.cmd。
+新用户不必运行prepare_*研究素材脚本；它们部分仍有本工作区历史路径。
+
+15.3 报告必须看哪些字段。
+
+  panel、normal/maximum、HBM阶梯、panel别名。
+  located_sites、target_member_layout、unified、lux。
+  sensor_mode/保留或patched状态。
+  CWB_PROFILES：每份ROI、原生尺寸、period、匹配权重。
+  runtime_consumer_added=false：基础工具没有自动加入后续nc.so CWB消费者。
+  properties_reference_only：属性只是供用户处理，没有暗中修改。
+  changed_partitions、packing_metadata：实际需重打的分区与打包元数据。
+  PERMISSIONS与CIL编译日志。
+
+通常system＋vendor；若目标原本odm有预编译策略并需更新，会另列odm。
+另行部署KO才涉及vendor_dlkm/配套kernel镜像，不是基本JSON转换自动修改的分区。
+如果不改任何product文件，就不为凑“全套”强行重打product。
+
+15.4 自动备份与重复PATCH。
+
+目标同级 <OriginOS解包名>_MIO_Backups\时间戳\ 下保存：
+  before/、after/、native_originals/
+  TRANSACTION.json、PATCH_REPORT.json、PERMISSIONS.txt
+  policy-*.log、hardware_reference/、CWB_PROFILES.json。
+
+保留第一次原件；再次PATCH从该原件重生成，不叠加未知二进制补丁。
+不要删备份后把已修改SF当成另一份全新官方SF输入。
+恢复选该次TRANSACTION记录；多次PATCH从最后一次反向恢复。
+人工编辑过同一文件要先另存，否则恢复会覆盖那次修改。
+
+本工具不是任意厂商反编译器。缺符号、未知结构、空隙不足或新ABI要补定位模板/测试。
+“所有偏移现场定位”不等于未知ROM自动一定适配成功。
+
+15.5 本地/云端构建的一致性记录。
+
+v1.0.2现有COMPARISON.json记录：EXE本体并非逐字节一样；
+但同一原件实际生成的13T/full40k、13T/official两组各45份输出、OP13编译CIL一组48份
+逐字节一致。诊断报告中的LLVM $x/$x.0映射符号名称经归一化后等价。
+这是已有三组样本的结果，不代替新平台现场验证，也不能说两份EXE哈希完全相同。
+
+=============================================================================
+16. 模块、挂载和固化
+=============================================================================
+
+16.1 常规模块文件映射。
+
+模块根应有module.prop、customize.sh（有需要时）、sepolicy.rule、system/载荷。
+例如：
+  system/bin/surfaceflinger          -> /system/bin/surfaceflinger
+  system/etc/LcmConfig/...           -> /system/etc/LcmConfig/...
+  system/lib64/nc.so                 -> /system/lib64/nc.so
+  system/vendor/lib64/...            -> /vendor/lib64/...
+  system/vendor/etc/cos_color/...    -> /vendor/etc/cos_color/...
+
+当前后期CWB v5的库载荷另列清楚，不能把基础工具生成的JSON当成已有这些库：
+  system/lib64/libsensorservice.so              目标自身、最小新增nc.so依赖
+  system/lib64/nc.so                           补偿/路由/生命周期库
+  system/lib64/libcwb_client.so                官方客户端
+  system/lib64/vendor.oplus.hardware.cwb@1.0.so
+  system/lib64/vendor.oplus.hardware.cwb-V2-ndk.so
+  system/lib64/vendor.oplus.hardware.displaypanelfeature@1.0.so
+  system/vendor/lib64/libcwb_qcom_aidl.so        目标自己的v5主屏缓冲修正
+保留现有libsensorcompat_ovsc.so及其接口；其原件用于对照，不被旧库盲盖。
+依赖是否足够以目标ELF NEEDED、namespace和真实加载为准，不是七个文件跨机型万能。
+
+“内置补丁ZIP”和“Magisk安装ZIP”要分清：没有module.prop/安装结构的内置资料包
+不能直接当模块刷。当前OP13T_OriginOS_亮度_HDR.zip就是内置文件/说明类资料。
+
+模块SH用LF换行。system.prop是属性行，不是运行shell命令的位置。
+安装脚本设正确属主/标签；不新增service.sh常驻root服务，不轮询亮度。
+模板里的安装失败检查与运行期哈希/日志扫描不是一回事；关键标签设失败不可假成功。
+
+16.2 本轮最终回到Mountify。
+
+当前使用Mountify普通文件覆盖，放弃危险的整个app目录自挂载镜像。
+之前自挂载将/system/app与/system_ext/app顶层换成tmpfs绑定树，
+默认卸载模块规则变化后原APK绑定失效，出现Invalid file、App和管理器异常。
+这个失败方案不是本教程推荐路径。
+
+KernelSU有元模块/卸载规则；Magisk有自己的模块覆盖机制；不能声称一包天然所有实现都兼容。
+“安装器成功”只表示安装完成，仍须查SF/system_server/composer的真实mount namespace。
+多个模块覆盖同一文件要按实际最终视图处理，不能凭模块名称排序猜赢家。
+不承诺所有App默认卸载模块后仍看到模块；不要用危险全局app顶层镜像实现豁免。
+
+16.3 DSU重启。
+
+先确认当前为目标DSU，确认模块/文件安装正常，有回退方案。
+在本机gsi_tool帮助和既有测试确认适用后，用gsi_tool enable -s设置单次启动DSU，
+再正常reboot。本轮实际采用该流程，不能只按reboot猜会仍进入DSU。
+重启后再次核对ro.gsid.image_running、boot_completed及运行组件。
+无线ADB/DSU设置因设备不同而变化，必要时保留USB救援。
+不要在用户正在测别的修复时未经当前确认触发软重启。
+
+16.4 内置固化。
+
+基础配置/原生补丁直接写目标system/vendor解包，随对应镜像打包。
+vendor配置可直接改；system/product/system_ext若靠/cust第二阶段覆盖，会有早期读取问题。
+SurfaceFlinger、system_server和某些配置只在初始化读取一次：晚覆盖不一定重新加载。
+VINTF和system/init服务声明尤其不能假定开机后再挂载就赶得上。
+本方案避免另造依赖晚挂载的root服务，但需要实际加载库在启动前可见。
+
+固化还须将sepolicy.rule翻译合入CIL、真实编译缓存、更新fs_config/file_contexts。
+不带自挂载启动脚本就说“OTA绝不失效”也不对：厂商更新原生ABI/策略可能使补丁需重做。
+每次OTA保留原件，重新取材、定位、构建、回归，不用旧偏移旧SF强覆盖。
+
+=============================================================================
+17. 测试、日志、定位与回退
+=============================================================================
+
+17.1 建议分四层验收，别一次混刷所有东西。
+
+  第一层：真实一加vendor/odm/kernel＋目标基础开机、传感器、指纹、AOD。
+  第二层：面板JSON、SRE、lux分派＋SF普通亮度传输。
+  第三层：HDR10/杜比/图片与色彩路径。
+  第四层：CWB普通补偿、模式切换、分辨率、息屏停启。
+
+每层保留修改前后文件、一次日志和回退；不拿热禁用结果代替冷启动结果。
+
+17.2 当前手机只读CWB脚本。
+
+  /sdcard/CWB_check.sh
+  su -c 'sh /sdcard/CWB_check.sh 2'
+
+脚本两次系统快照＋一次硬件只读扫描，输出报告到/sdcard并退出。
+不创建CWB客户端、不注册sensorservice、不写SSC、不开永久截图服务。
+
+读报告顺序：
+  1. Awake/分辨率/正确PID。
+  2. ready/active是否有真实初始化和租约。
+  3. RAW_MODE的DC、DBV、算法、factory/hall和applied。
+  4. CALLBACK_RGB、CWB_RGB_CACHE、补偿RGB是否在稳定画面时一致。
+  5. callbacks/calculated/timing推进与失败数。
+  6. ROUTER joins/misses/duplicates。
+  7. CWB_PIXELS非黑像素位置、RGB总和、stride、尺寸和ROI。
+
+该脚本的探针与ABI针对当前OP13提取库；不保证别的机型可以直接运行。
+N/A/读取失败表示未知，不是RGB=0，不是一定内核坏；检查脚本字段和实际节点。
+
+17.3 色块实验。
+
+  同一室内光照，保持手机位置，固定或记录DBV，先普通非HDR页面。
+  官方ROI小块依次红/绿/蓝/黑/白，外围白。
+  再将色块挪到异位，验证官方ROI不应跟着异位颜色错误变化。
+  分别FHD/QHD；切换后等待真实wm/HWC恢复，不只看设置菜单选择。
+  静止和有限刷新刺激分开记录；测试结束删除窗口亮度覆盖，停止有限动画。
+  非原子快照需要稳定几秒复查。
+
+17.4 自动亮度验收。
+
+  自动开关off时，在非HDR/non-HBM场景不应继续追环境lux调整。
+  自动on时检查控制中心与设置的slider、低中高档、最小值、普通最大值。
+  强光用持续照射并记录进入/退出lux、时间、DBV、HBM状态及电池/温度限制。
+  高lux仍3515：先看SRE是否收到正确lux、配置selector、节点可读性、输出传输和限制。
+  不要只说“挂载”，也不要不看日志就说“用户被学习了”。
+
+17.5 典型故障分流。
+
+【开机卡第一/二屏】
+  有ADB先抓logcat all、内核日志、SF/system_server是否反复换PID。
+  无ADB从Recovery保存已有日志、pstore等，有什么读什么，不伪造不存在的记录。
+  查ELF NEEDED、namespace、OVSC字符串扫描、标签、原生崩溃栈。
+  禁用具体新模块，不清空整个/data/adb，也不盲替全系统SO。
+
+【CWB有RGB但计算不变】
+  查dc/factory/hall/algorithm，seq匹配、原始包完整性、积分时窗与guard。
+  v5 DC不支持就是已知边界，不是把回调RGB显示到App就补偿完成。
+
+【白页面升亮或lux随DBV大变】
+  查补偿是否实际进入Vivo前、ROI/校准/模式/时序。
+  原lux本来会受屏幕漏光影响；正确补偿还需固定环境做跨画面/DBV对照。
+  不能只验证颜色跟随就断言光学标定全部正确。
+
+【息屏指纹解锁低亮/黑屏】
+  在故障保持原状态抓DBV、显示state、fingerprint HBM退出、init与HAL AVC。
+  /sys/kernel/oplus_display/hbm是指纹相关，/sys/lcm/oled_hbm是全局HBM。
+  新内核全局HBM正常，也不能推出指纹退出和SELinux全正常。
+
+【HDR比率N/A/满条1】
+  App数据源/API、SF合成比率、display/SDR nit、真实背光分别看。
+  满条可能缺headroom，但异常上限/映射也可能导致1，不能无条件判正常。
+
+【发黄/截图紫绿】
+  同视频前后台、HDR退出后的白色UI、colorMode/dataspace和配置解析作对照。
+  视频被截成SDR快照的路径和面板HDR显示路径不同，不只查解码器。
+
+【设置与配置不生效】
+  查SKU/_0x0等后缀、早期缓存、CIL预编译缓存、进程实际挂载和覆写冲突。
+
+17.6 回退。
+
+模块回退优先管理器禁用并正常重启。ADB救援示例只针对明确已知的模块：
+  su -c 'touch /data/adb/modules/op13_cos_cwb/disable'
+下次启动还原库覆盖，不等于当场卸载已加载的nc.so或恢复所有进程内状态。
+显示权限独立模块ID为op13_display_node_permissions，不混淆两者。
+目标内置回退用PATCH备份或匹配原镜像，KO回退用原槽备份。
+不要使用删除整个系统目录/全部模块等粗暴操作。
+
+17.7 功耗验收。
+
+统计实际后台进程/线程、息屏停止、CPU时间、Binder回调速率和持续待机。
+普通画面静止时检查是否只是缓存复用；确认无每帧全屏截图。
+“没有额外轮询”不等于0耗电；250ms官方客户端也有工作。
+以前不同方案的1～3mAh或2～10mAh估计不能当成本版本实测数据。
+与官方对比要同亮度、同环境、同温度、同LTPO/网络/待机时间，不单看瞬时CPU。
+
+=============================================================================
+18. 其他机型适配：一加13T实例
+=============================================================================
+
+18.1 可复用的是流程，不是所有常量。
+
+OP13范例：
+  真机PJZ110/project23821；原生1440×3168；ROI1010,148—1048,190；1596像素。
+  normal3515、maximum4094；当前runtime CWB V2.1实验限定该机器/该ABI。
+
+本轮13T官方取材示例：
+  PKX110；面板AA594_P_7_A0020。
+  profile示例fusionlight_Main_2_3、project24821。
+  原生1216×2640；ROI732,100—771,138；39×38=1482像素；period250ms。
+  该份资料normal3515、maximum4094，碰巧与13相同，不代表应先硬写同值。
+  权重需要与自己的/odm/etc/display/cwb_weightspos.json匹配。
+
+18.2 一份新13T适配的操作顺序。
+
+  1. 提取13T真实官方ColorOS16，含my_product、odm CWB、显示库及属性。
+  2. 提取实际要修的OriginOS移植版本，记录SF/传感器扩展库与完整配置。
+  3. 先确认13T本来用自己的vendor/odm，别刷OP13硬件恢复A。
+  4. 读取normal/max、Apollo、面板别名、Hbm mode和自己的CWB资料。
+  5. 两框PATCH：目标OriginOS＋13T官方；选择需要的HBM政策。
+  6. 报告若sensor_mode=preserve，明确还没修lux分派，不写已完成HBM。
+  7. 与自己的内核/KMI配套编译并部署msm_drm兼容ABI。
+  8. 在实际目标SF中定位原生传输；不能用13的SF字节覆盖。
+  9. 处理CIL/config元数据，打报告列出的分区或制作实际安装模块。
+ 10. 普通亮度/HBM/HDR先过，再研发13T自己的运行时CWB。
+ 11. 13T CWB若要套现有方法，重新审计handle、事件布局、client/service ABI、
+     ROI/权重、原生缓冲、工厂校准、时序和DC/SF后端。
+
+现有PATCH会保存多机型CWB_PROFILES，但不会自动把OP13 runtime改成13T。
+当前13T ZIP是离线内置资料，未包含最新OP13 v5运行时CWB，不能称通刷完成品。
+
+13T本轮/vendor/etc/cos_color/文件例子：
+  display_apollo_list_AA594_P_7_A0020_dsc_cmd_mode_panel.xml
+  display_brightness_config_P_7.xml、display_brightness_app_list.xml
+  display_dbvgain_config_v2_AA594_P_7_A0020_dsc_cmd_mode_panel.xml
+  display_demura_config_v2_AA594_P_7_A0020_dsc_cmd_mode_panel.xml
+  multimedia_display_adfr2minfps_config.xml、multimedia_display_brightness_config.xml
+  multimedia_display_demura_config.xml、multimedia_display_feature_config.xml
+  multimedia_display_trackpoint_config.xml、multimedia_display_uir_config.xml
+  multimedia_display_voltage_limit.xml
+这里只展示已经收到的供体内容；新机型应完整扫描，不按这份文件名筛掉自己的配置。
+
+18.3 新平台/新Android版本的重新定位清单。
+
+  - SoC与所选机型对应的显示源码目录/构建方法。
+  - Sensor handle/type、sampling字段、校准服务及AIDL/HIDL版本。
+  - 光感完整事件怎样变为标准alias，哪里丢字段。
+  - 面板/LCM ID、配置选择器、SKU、命名与全部端点。
+  - SF入口/输出、unified/legacy成员、标准提交函数与colorMode。
+  - CWB取色输出坐标空间、buffer stride/format、旋转/分辨率通知。
+  - 每个目标ELF的依赖/namespace、字符串空隙、重定位与已有适配库。
+  - 实际SELinux域、类型、DAC、预编译策略布局。
+  - 默认学习、温控、电量/时间保护和HDR headroom。
+
+未知项没证据就保留原件，先取材；不要静默造默认值继续生成。
+
+=============================================================================
+19. 当前文件与源码索引
+=============================================================================
+
+【取材】
+  E:\MIO\tools\MioDisplayExtractor\
+    MIO_Display_Extractor.cmd、Extract-MioDisplay.ps1、OriginOS_Target_Collect.sh
+    README.txt、VIVO_TARGET_CHECKLIST.txt、TEST_RESULT.txt
+
+【基础PATCH】
+  E:\MIO\tools\OplusOriginPatcher\
+    app.py、patcher.py、configs.py、sources.py、rom_io.py
+    locator.py、native.py、native_extra.py、cil_policy.py
+    intents.py、research_native.py：真实面板颜色intent与ELF分析，不遗漏这两份依赖
+    test_patcher.py、README.txt、assets/、compiler_source/、reference/
+  E:\MIO\github\OriginOS-OnePlus-Brightness-Patcher\
+  参考/oplus-camera-ota-helper的双ROM操作方式，不代表共用其显示补丁。
+
+【OriginOS最初研究】
+  E:\MIO\analysis\originos_brightness_research_20261003\
+    Demo、面板映射、lux分派、内核ABI/取材材料。
+  E:\MIO\analysis\originos_hdr_vendor_compare_20261003\
+    原生传输、HDR/杜比与vendor前后对照。
+  E:\MIO\analysis\screenoff_stall_20261004_143219\
+    Vivo官方对照、锁屏XDR/AOD、HDRUI独立测试、官方CWB补充。
+
+【CWB最新】
+  E:\MIO\cwb_compensation_20261004\
+    cwb_compensator.cpp/h、system_interposer.cpp
+    light_packet_router.h、factory_calibration.h、compensation_math.h
+    sample_selection.h、capture_window.h、official_profile.h
+    generate_profile.py、patch_cwb_buffer.py、build.py、build_deployment.py
+    cwb_state_probe.cpp、comp_status_probe.cpp、cwb_check.sh.in、build_check_sh.py
+    pattern_app/、Test-PassiveColors.ps1、Test-PassiveBrightness.ps1
+    test_official_modes.py、test_vivo_sf_credentials.py
+    sf_rgb_math.h、sf_rgb_lut.h、sf_rgb_oracle.py、test_sf_rgb_math.py、sf_roi_probe.cpp
+    cwb_compensator_state_test.cpp（最新源码单测，非已上线运行库）
+    module_files/sepolicy.rule、display_nodes.cil、user_additions.cil
+
+【诊断App】
+  E:\MIO\op13_hdr_lab\
+    app/src/main/java/local/mio/op13hdrlab/：MainActivity、LabTelemetry、RootShell、
+    OverlayService、CwbActivity。
+    native/、tools/build_hdr_probe.ps1、tools/download_samples.py、assets/offline来源记录。
+  E:\MIO\cwb_compensation_20261004\pattern_app\
+    静态ROI五色App，local.nyako.cwbpattern；与旧HDR实验室有限探针不是同一个入口。
+    这个小App无传感器/网络/常驻后台/唤醒锁，颜色选择不依靠循环刷新。
+
+  E:\MIO\analysis\hbm_fod_20261005\分支核对与黑屏结论.txt
+    第15/16节为最后普通CWB与源码状态，前面“待测”文字是历史阶段，不要混用。
+
+【已交付普通CWB/权限模块】
+  C:\Users\a1510\Videos\OP13_OriginOS_CWB_Compensation_Test_20261005_v5.zip
+  C:\Users\a1510\Videos\OP13_OriginOS_Display_Node_Permissions_20261005_v3.zip
+  v1/v2/v3/v4等旧包保留追溯，不建议再刷旧失败版本。
+  v5 ZIP是当前已部署实验载荷；工作区最新源码包含未部署修正，两者不完全等同。
+
+【基础资料与13T】
+  C:\Users\a1510\Videos\MIO_OriginOS_Brightness_HDR_Patcher_20261004_完整资料.zip
+  C:\Users\a1510\Videos\OP13T_OriginOS_亮度_HDR.zip
+  后者要看PERMISSIONS/CIL/报告，是内置文件资料，不是直接Magisk安装器。
+
+【内核】
+  E:\MIO\github\Action-Build-AL1S\patches\originos\
+  KSU正式补入提交194869a；KSUN正式补入提交6702fb0。
+  对应成功Actions：37279697585（一加13T_b）、37279703767（一加13_b）。
+  这些固定记录用于追溯，不要求未来继续用这一次二进制配所有OTA。
+
+【备份原件】
+  基础工具每次target同级_MIO_Backups。
+  reference/OP13_BC06_before_after/deployment/phone_backup/original.tar
+  reference/OP13_BC06_before_after/hbm40k_deployment/original.tar
+  CWB preinstall_libsensorservice.so、preinstall_libsensorcompat_ovsc.so。
+  每份目标原件独立保留，不用官方供体文件冒充目标原件。
+
+【构建注意】
+  基础工具可按README构建并运行python -m unittest test_patcher -v。
+  CWB build.py仍含OP13本地素材路径与当前目标私有ABI；新机先改取材/定位再构建。
+  当前build_deployment.py会生成命名v5的包；源码已有研发改动，
+  开发者须先另设版本/输出目录，不覆盖原已验收v5 ZIP后还沿用旧测试结论。
+  正式库使用quiet构建去掉周期刷屏，保留初始化/订阅切换/异常，不新增日志定时器。
+
+本轮CWB构建入口示例（先适配材料、依赖路径和输出版本再执行）：
+  python build.py --quiet
+  python patch_cwb_buffer.py
+  python build_deployment.py
+第一步还会生成官方profile与生命周期地址头；NDK/官方profile路径写在当前脚本中。
+第二步只支持上文已审计OP13 vendor库。第三步读取两步产物及模块模板，
+当前仍写固定v5输出位置，复刻前必须改独立输出版本，别覆盖实测原包。
+这三个命令不代表新机型一键适配；需要先补前文的真实定位和离线测试。
+
+官方算法对照测试与生产状态测试分开：
+  test_official_modes.py验证已识别分支选择；
+  test_sf_rgb_math.py做404组数学对照，不建立正式SF后端；
+  cwb_compensator_state_test.cpp检验最新状态转换，不替代实机DC/FOD测试。
+旧Test-OriginStatic.ps1会建立候选CWB并写SSC，不是只读工具；
+日常使用CWB_check.sh/Test-PassiveColors.ps1，不能随便在官方Fusion运行时叠旧探针。
+
+验收清单（每台新机填写）：
+  [ ] 真实机型/SoC/面板/内核/目标系统版本与材料来源齐全。
+  [ ] 面板普通、峰值、Apollo/nit表、后缀/SKU全部对齐。
+  [ ] 自动开关与两处slider正常，没有重复策略控制。
+  [ ] 标准lux分派有效，HBM收到同一正确光线通道。
+  [ ] 内核五ABI及原一加节点正常，global/fingerprint HBM区分。
+  [ ] HBM进入/退出、保护、防抖与用户所选政策符合记录。
+  [ ] SF标准输入和输出、legacy/unified映射都正确。
+  [ ] HDR10/杜比/图片、前后台/截图/白点分别验证。
+  [ ] 配置有实际解析/消费证据，而不是仅文件存在。
+  [ ] CWB普通五色、异位对照、FHD/QHD、静止/变化页面通过。
+  [ ] 实际lux补偿固定环境跨颜色/DBV对照，不只有RGB跟随。
+  [ ] 息屏停启、指纹退出、密码解锁/AOD与真实AVC检查通过。
+  [ ] DC/FOD/SF及其他未完成模式明确写明，不冒充已支持。
+  [ ] 文件标签/DAC、运行进程挂载、CIL编译缓存与打包config正确。
+  [ ] 无意外root守护/永久探针/全屏截图轮询，功耗实际对照。
+  [ ] 原件备份、模块禁用、镜像与KO回退路径可用。
+
+=============================================================================
+20. 官方参考与证据边界
+=============================================================================
+
+Magisk官方模块布局、system.prop、sepolicy.rule、安装权限接口：
+  https://topjohnwu.github.io/Magisk/guides.html
+KernelSU官方模块与挂载机制说明：
+  https://kernelsu.org/guide/module.html
+Android init SELinux加载、编译与预编译缓存选择源码：
+  https://android.googlesource.com/platform/system/core/+/refs/heads/main/init/selinux.cpp
+Android显示stage/persist与区域采样参考源码：
+  https://android.googlesource.com/platform/frameworks/native/+/refs/heads/main/services/surfaceflinger/DisplayDevice.cpp
+  https://android.googlesource.com/platform/frameworks/native/+/refs/heads/android16-release/services/surfaceflinger/RegionSamplingThread.cpp
+OnePlus公开内核/显示模块参考：
+  https://github.com/OnePlusOSS/android_kernel_modules_and_devicetree_oneplus_sm8750
+本次兼容层与基础工具仓库：
+  https://github.com/Maga-King/Action-Build-AL1S
+  https://github.com/Maga-King/OriginOS-OnePlus-Brightness-Patcher
+
+公开AOSP源码用于解释标准接口，不用于猜Vivo/OPPO私有偏移。
+实际布局、私有状态、配置解析和官方分支来自本机提取二进制/配置与日志。
+源文件某个版本README可能保留当时“待验证”，以最后实测记录/部署记录为准。
+离线结构/仿真通过不等于每机型开机、色准、待机、温控、指纹和户外都已通过。
+教程记录的方法可迁移，二进制和校准不可无条件迁移。
+
+一句话复刻顺序：
+  自己的官方取材 → 自己的目标消费者分析 → 面板标尺转换 → 内核ABI与lux/SF传输
+  → 正确权限和早期加载 → 普通/HBM/HDR验证 → CWB光学补偿 → 分模式与功耗验收。
+
+教程结束。

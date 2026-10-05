@@ -1,0 +1,18 @@
+; Complete user-requested CIL grants, deduplicated. The truncated fragment
+; had no class/permissions and is intentionally not interpreted as a grant.
+; The requested init/sysfs_graphics_ffl rule is already in display_nodes.cil.
+; Property file write does not grant property_service set.
+(allow hal_fingerprint_oppo vendor_fingerprint_prop (file (getattr open read map write)))
+(allow hal_allocator_default vendor_file (file (getattr)))
+(allow hal_vcode_default system_prop (file (open)))
+(allow hal_vcode_default servicemanager (binder (transfer)))
+(allow hal_sectee_default system_prop (file (open)))
+(allow hal_sectee_default init_service_status_private_prop (file (open)))
+(allow hal_trust_default system_prop (file (open)))
+(allow hal_trust_default init_service_status_private_prop (file (read)))
+(allow hal_trust_default servicemanager (binder (call)))
+(allow hal_sectee_default system_file (file (read)))
+(allow hal_vcustom_default system_prop (file (open)))
+(allow hal_vcustom_default servicemanager (binder (transfer)))
+(allow hal_vdtf_default system_prop (file (open)))
+(allow vendor_hal_alarm_qti_default system_file (file (open)))

@@ -1,0 +1,602 @@
+{
+  "source": "E:\\MIO\\cwb_compensation_20261004\\coloros_live_ext.so",
+  "source_sha256": "a891eb28a542839f24a946cfc126fd098a6d3c08f6177c5726a4a577e7d47dfd",
+  "checks_passed": 416,
+  "coverage": [
+    "DC/PWM flag extraction",
+    "factory/forced-report/latest flags",
+    "pending: packed<65536",
+    "16-bit sequence extraction",
+    "region CWB/SF selection: all 64 Boolean combinations"
+  ],
+  "not_covered": [
+    "SF Binder transport",
+    "filtering/compensation",
+    "mode-transition state cleanup",
+    "frame geometry",
+    "hardware callbacks",
+    "power behaviour"
+  ],
+  "selector_window": [
+    "0x7cfa8",
+    "0x7d00c"
+  ],
+  "channel_cases": [
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 0,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 0,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 0,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 0,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 0,
+      "hall": 1,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 0,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 0,
+      "factory": 1,
+      "hall": 1,
+      "channel": "CWB"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 0,
+      "hall": 1,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 0,
+      "channel": "SF"
+    },
+    {
+      "cwb": 1,
+      "available": 1,
+      "dc": 1,
+      "force_sf": 1,
+      "factory": 1,
+      "hall": 1,
+      "channel": "SF"
+    }
+  ]
+}

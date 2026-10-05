@@ -1,0 +1,126 @@
+#!/system/bin/sh
+# OP13 OriginOS CWB v5: finite read-only diagnostics. Run with root.
+# Embedded native tools read existing state. No screenshot, sensor subscription,
+# SSC writes, property changes, CWB activation, background loop or logcat writes.
+if [ "$(id -u)" != 0 ]; then
+    echo '请用 root 终端运行：su -c "sh /sdcard/CWB_check.sh"'
+    exit 1
+fi
+CWB_WAIT_SECONDS=${1:-3}
+case "$CWB_WAIT_SECONDS" in 1|2|3|4|5|6|7|8|9|10) ;; *) echo '检查间隔仅支持1到10秒，默认3秒。'; exit 1 ;; esac
+CWB_WORK_DIR=$(mktemp -d /data/local/tmp/cwb-check.XXXXXX) || exit 1
+trap 'rm -f "$CWB_WORK_DIR/status" "$CWB_WORK_DIR/hardware" "$CWB_WORK_DIR/gate"; rmdir "$CWB_WORK_DIR"' EXIT
+trap 'exit 130' INT TERM
+base64 -d > "$CWB_WORK_DIR/status" <<'CWB_STATUS_BASE64'
+@@STATUS_BASE64@@
+CWB_STATUS_BASE64
+base64 -d > "$CWB_WORK_DIR/hardware" <<'CWB_HARDWARE_BASE64'
+@@HARDWARE_BASE64@@
+CWB_HARDWARE_BASE64
+base64 -d > "$CWB_WORK_DIR/gate" <<'CWB_GATE_BASE64'
+@@GATE_BASE64@@
+CWB_GATE_BASE64
+chmod 700 "$CWB_WORK_DIR/status" "$CWB_WORK_DIR/hardware" "$CWB_WORK_DIR/gate" || exit 1
+CWB_REPORT=/sdcard/CWB_check_$(date +%Y%m%d_%H%M%S).txt
+field() { printf '%s\n' "$1" | sed -n "s/.* $2=\([^ ]*\).*/\1/p"; }
+describe_color() {
+    cwb_rgb=$1
+    case "$cwb_rgb" in *,*,*) ;; *) echo '颜色不可读取'; return ;; esac
+    cwb_r=${cwb_rgb%%,*}; cwb_rest=${cwb_rgb#*,}
+    cwb_g=${cwb_rest%%,*}; cwb_b=${cwb_rest#*,}
+    if [ "$cwb_r" -lt 8 ] && [ "$cwb_g" -lt 8 ] && [ "$cwb_b" -lt 8 ]; then echo '黑色/极暗'
+    elif [ "$cwb_r" -gt 230 ] && [ "$cwb_g" -gt 230 ] && [ "$cwb_b" -gt 230 ]; then echo '白色'
+    elif [ "$cwb_r" -gt "$((cwb_g*2))" ] && [ "$cwb_r" -gt "$((cwb_b*2))" ]; then echo '红色/偏红'
+    elif [ "$cwb_g" -gt "$((cwb_r*2))" ] && [ "$cwb_g" -gt "$((cwb_b*2))" ]; then echo '绿色/偏绿'
+    elif [ "$cwb_b" -gt "$((cwb_r*2))" ] && [ "$cwb_b" -gt "$((cwb_g*2))" ]; then echo '蓝色/偏蓝'
+    elif [ "$cwb_r" -gt "$((cwb_b*2))" ] && [ "$cwb_g" -gt "$((cwb_b*2))" ]; then echo '黄色系'
+    elif [ "$cwb_r" -gt "$((cwb_g*2))" ] && [ "$cwb_b" -gt "$((cwb_g*2))" ]; then echo '紫红色系'
+    elif [ "$cwb_g" -gt "$((cwb_r*2))" ] && [ "$cwb_b" -gt "$((cwb_r*2))" ]; then echo '青色系'
+    else echo '灰色或混合颜色（以RGB为准）'; fi
+}
+run_report() {
+    echo '=== 一加13 CWB 实际工作检查 ==='
+    date
+    echo '只读现有服务；不主动启动取色，默认两次快照，检查结束即退出。'
+    echo '亮屏且光感有客户端时应推进；息屏停止或画面静止缓存较旧不直接算故障。'
+    echo '--- 屏幕 ---'
+    wm size
+    dumpsys power | grep 'mWakefulness='
+    CWB_SS_PID=$(pidof system_server)
+    CWB_COMPOSER_PID=$(pidof vendor.qti.hardware.display.composer-service)
+    case "$CWB_SS_PID" in ''|*' '*) echo '无法确定唯一 system_server，停止检查。'; return ;; esac
+    echo "system_server=$CWB_SS_PID composer=$CWB_COMPOSER_PID"
+    echo '--- 系统补偿：第一次快照 ---'
+    CWB_GATE_FIRST=$("$CWB_WORK_DIR/gate" "$CWB_SS_PID" 2>&1)
+    printf '%s\n' "$CWB_GATE_FIRST" | grep -E '^CALLBACK_RGB|^RAW_MODE|^ROUTER|^POLICY'
+    CWB_FIRST=$("$CWB_WORK_DIR/status" "$CWB_SS_PID" 2>&1)
+    CWB_FIRST_RC=$?
+    printf '%s\n' "$CWB_FIRST"
+    echo "等待 $CWB_WAIT_SECONDS 秒……"
+    sleep "$CWB_WAIT_SECONDS"
+    if [ "$(pidof system_server)" != "$CWB_SS_PID" ]; then
+        echo '检查期间 system_server 已变化，本轮无效；请稍后重跑。'; return
+    fi
+    echo '--- 系统补偿：第二次快照 ---'
+    CWB_GATE_SECOND=$("$CWB_WORK_DIR/gate" "$CWB_SS_PID" 2>&1)
+    printf '%s\n' "$CWB_GATE_SECOND" | grep -E '^CALLBACK_RGB|^RAW_MODE|^ROUTER|^POLICY'
+    CWB_CALLBACK=$(printf '%s\n' "$CWB_GATE_SECOND" | grep '^CALLBACK_RGB')
+    CWB_MODE=$(printf '%s\n' "$CWB_GATE_SECOND" | grep '^RAW_MODE')
+    CWB_CALLBACK_RGB=$(field "$CWB_CALLBACK" RGB)
+    if [ "$(field "$CWB_CALLBACK" valid)" = 1 ]; then
+        echo "官方CWB客户端最近回调RGB：$CWB_CALLBACK_RGB；大致颜色：$(describe_color "$CWB_CALLBACK_RGB")"
+        echo '这一项独立于补偿计算RGB；只读已存在的官方回调缓存，不新建客户端。'
+    else
+        echo '硬件回调颜色：N/A（无有效记录或当前库不支持此探针布局）。'
+    fi
+    CWB_SECOND=$("$CWB_WORK_DIR/status" "$CWB_SS_PID" 2>&1)
+    CWB_SECOND_RC=$?
+    printf '%s\n' "$CWB_SECOND"
+    if [ "$CWB_FIRST_RC" = 0 ] && [ "$CWB_SECOND_RC" = 0 ]; then
+        CWB_RGB=$(field "$CWB_SECOND" RGB)
+        CWB_HAS_CALC=$(field "$CWB_SECOND" calculated)
+        if [ -n "$CWB_HAS_CALC" ] && [ "$CWB_HAS_CALC" -gt 0 ]; then
+            echo "补偿最近采用的RGB：$CWB_RGB；大致颜色：$(describe_color "$CWB_RGB")"
+            echo '说明：这是最近一次计算采用的颜色，不是整屏平均；停止后会保留旧值，并非当前实时取色。'
+        else
+            echo '补偿颜色：N/A（尚无有效补偿计算；初始化的RGB=0不表示取到了黑色）。'
+        fi
+        for CWB_COUNTER in callbacks calculated missing held rejected; do
+            CWB_BEFORE=$(field "$CWB_FIRST" "$CWB_COUNTER")
+            CWB_AFTER=$(field "$CWB_SECOND" "$CWB_COUNTER")
+            if [ -n "$CWB_BEFORE" ] && [ -n "$CWB_AFTER" ]; then
+                echo "$CWB_COUNTER：$CWB_BEFORE -> $CWB_AFTER，变化 $((CWB_AFTER-CWB_BEFORE))"
+            fi
+        done
+        CWB_READY=$(field "$CWB_SECOND" ready)
+        CWB_ACTIVE=$(field "$CWB_SECOND" active)
+        CWB_CB1=$(field "$CWB_FIRST" callbacks); CWB_CB2=$(field "$CWB_SECOND" callbacks)
+        CWB_CALC1=$(field "$CWB_FIRST" calculated); CWB_CALC2=$(field "$CWB_SECOND" calculated)
+        if [ "$CWB_READY" = 1 ] && [ "$CWB_ACTIVE" = 1 ] && [ "$CWB_CB2" -gt "$CWB_CB1" ] && [ "$CWB_CALC2" -gt "$CWB_CALC1" ]; then
+            echo '本轮：CWB回调和实际补偿计算都在推进。'
+        elif [ "$CWB_READY" = 0 ]; then
+            echo '本轮：CWB尚未完成初始化。亮屏时须排查原始光感包中的DBV、启动条件、客户端依赖和权限，不能判定取色为黑。'
+        elif [ "$CWB_ACTIVE" = 0 ]; then
+            echo '本轮：补偿停用；息屏/无光感订阅时可能正常。'
+        else
+            echo '本轮：未同时确认回调与计算增长。请亮屏、启用自动亮度、切换测试色块后重跑。'
+            if [ "$(field "$CWB_MODE" dc)" = 1 ]; then
+                echo '模式证据：原始光感DC位=1；23821官方配置要求SF区域取色。v5未实现这条补偿分支，不能误报为硬件不取色或标签错误。'
+            fi
+        fi
+    else
+        echo '无法读取补偿状态，不能据此判定颜色/工作正常。可能未加载或库已变化。'
+    fi
+    echo '--- 硬件CWB缓冲（一次只读扫描） ---'
+    case "$CWB_COMPOSER_PID" in ''|*' '*) echo '无法确定唯一显示服务，未扫描。' ;;
+        *) "$CWB_WORK_DIR/hardware" "$CWB_COMPOSER_PID"; echo "硬件探针退出码=$?" ;;
+    esac
+    echo '说明：CWB_BUFFER是取色缓冲而非wm屏幕尺寸；FHD下1440x3168是v5预期。'
+    echo 'CWB_RGB_CACHE给出显示服务的取色区域、处理后的RGB和纯色分类；可与上方回调/补偿RGB对照。'
+    echo 'CWB_PIXELS bounds是非黑像素位置，sums是原始RGB通道总和，不是官方处理后RGB。'
+    echo '缓存、原始像素与回调不是原子快照；切色瞬间不同需要隔几秒复查，不能单次就断言故障。'
+    echo '纯黑时nonzero=0不能单独断言故障；读取失败/ABI不支持也不能当成黑色。'
+    echo '静止画面缓存年龄变大可来自LTPO/缓存复用，不等于回调停止。'
+    echo "报告保存在：$CWB_REPORT"
+}
+run_report 2>&1 | tee "$CWB_REPORT"

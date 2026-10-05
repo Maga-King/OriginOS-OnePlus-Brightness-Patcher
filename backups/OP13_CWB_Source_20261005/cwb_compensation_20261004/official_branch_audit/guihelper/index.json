@@ -1,0 +1,639 @@
+{
+  "source": "E:\\MIO\\cwb_compensation_20261004\\..\\analysis\\originos_hdr_vendor_compare_20261003\\coloros\\files\\system_ext\\lib64\\libguiextimpl.so",
+  "sha256": "c9fe5f6bfc69f6d7fa33dc908cf42fcd3a454fc120811aa0c77d4e09a6977f87",
+  "coverage": "Function inventory and disassembly, NOT yet a verified semantic reconstruction",
+  "functions": [
+    {
+      "symbol": "_ZN7android21OplusScreenShotHelper11getInstanceEv",
+      "address": "0x384a4",
+      "size": 204,
+      "file": "000384a4__ZN7android21OplusScreenShotHelper11getInstanceEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x384ec",
+          "target": "0x3b240",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x38510",
+          "target": "0x3ae38",
+          "symbol": "__cxa_guard_acquire"
+        },
+        {
+          "site": "0x38520",
+          "target": "0x3acb8",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x38528",
+          "target": "0x3c998",
+          "symbol": "_ZN7android21OplusScreenShotHelperC1Ev"
+        },
+        {
+          "site": "0x38540",
+          "target": "0x3b240",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x38558",
+          "target": "0x3ab68",
+          "symbol": "__cxa_atexit"
+        },
+        {
+          "site": "0x38564",
+          "target": "0x3ae50",
+          "symbol": "__cxa_guard_release"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x384c4",
+          "instruction": "tbz w9, #0, #0x38504",
+          "target": "0x38504"
+        },
+        {
+          "site": "0x384d4",
+          "instruction": "cbz x0, #0x384f0",
+          "target": "0x384f0"
+        },
+        {
+          "site": "0x38518",
+          "instruction": "cbz w0, #0x384c8",
+          "target": "0x384c8"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN7android2spINS_21OplusScreenShotHelperEED2Ev",
+      "address": "0x38570",
+      "size": 24,
+      "file": "00038570__ZN7android2spINS_21OplusScreenShotHelperEED2Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x38580",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x3857c",
+          "instruction": "cbz x0, #0x38584",
+          "target": "0x38584"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN7android21OplusScreenShotHelper16addEventListenerERKNS_4RectERKiRKNS_2spINS_3gui24IOplusScreenShotListenerEEE",
+      "address": "0x38588",
+      "size": 960,
+      "file": "00038588__ZN7android21OplusScreenShotHelper16addEventListenerERKNS_4RectERKiRKNS_2spINS_3gui24IOplusScreenShotListenerEEE.asm.txt",
+      "calls": [
+        {
+          "site": "0x385b4",
+          "target": "0x3b6a8",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x385c0",
+          "target": "0x3b678",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x385cc",
+          "target": "0x3be70",
+          "symbol": "_ZN7android15ComposerService18getComposerServiceEv"
+        },
+        {
+          "site": "0x385f0",
+          "target": "0x3b240",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x385fc",
+          "target": "0x3be88",
+          "symbol": "_ZN7android10IInterface8asBinderERKNS_2spIS0_EE"
+        },
+        {
+          "site": "0x38618",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38638",
+          "target": "0x3b330",
+          "symbol": "_ZN7android6ParcelC1Ev"
+        },
+        {
+          "site": "0x38658",
+          "target": "0x3b330",
+          "symbol": "_ZN7android6ParcelC1Ev"
+        },
+        {
+          "site": "0x38674",
+          "target": "0x3bac8",
+          "symbol": "_ZN7android6Parcel19writeInterfaceTokenERKNS_8String16E"
+        },
+        {
+          "site": "0x38684",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x386b8",
+          "target": "0x3b048",
+          "symbol": "_ZN7android6Parcel10writeInt32Ei"
+        },
+        {
+          "site": "0x386c8",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x386f8",
+          "target": "0x3ac58",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x38700",
+          "target": "0x3b348",
+          "symbol": "_ZN7android6ParcelD1Ev"
+        },
+        {
+          "site": "0x38708",
+          "target": "0x3b348",
+          "symbol": "_ZN7android6ParcelD1Ev"
+        },
+        {
+          "site": "0x38724",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38740",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38748",
+          "target": "0x3b690",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x3874c",
+          "target": "0x3b6a8",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x3877c",
+          "target": "0x3c9c8",
+          "symbol": "_ZN7android6Parcel12writeInplaceEm"
+        },
+        {
+          "site": "0x38794",
+          "target": "0x3b048",
+          "symbol": "_ZN7android6Parcel10writeInt32Ei"
+        },
+        {
+          "site": "0x387a4",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x387d4",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x38828",
+          "target": "0x3b240",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x38834",
+          "target": "0x3be88",
+          "symbol": "_ZN7android10IInterface8asBinderERKNS_2spIS0_EE"
+        },
+        {
+          "site": "0x38840",
+          "target": "0x3bea0",
+          "symbol": "_ZN7android6Parcel17writeStrongBinderERKNS_2spINS_7IBinderEEE"
+        },
+        {
+          "site": "0x38860",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x3887c",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38888",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x388e8",
+          "target": "0x3beb8",
+          "symbol": "_ZN7android14statusToStringEi"
+        },
+        {
+          "site": "0x38910",
+          "target": "0x3ac58",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x38928",
+          "target": "0x3ab98",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x38938",
+          "target": "0x3b6c0",
+          "symbol": "atrace_begin_body"
+        },
+        {
+          "site": "0x38940",
+          "target": "0x3b6d8",
+          "symbol": "atrace_end_body"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x385b8",
+          "instruction": "tbnz w0, #1, #0x38930",
+          "target": "0x38930"
+        },
+        {
+          "site": "0x385dc",
+          "instruction": "cbz x8, #0x385f4",
+          "target": "0x385f4"
+        },
+        {
+          "site": "0x38604",
+          "instruction": "cbz x8, #0x3861c",
+          "target": "0x3861c"
+        },
+        {
+          "site": "0x38678",
+          "instruction": "cbz w0, #0x386b0",
+          "target": "0x386b0"
+        },
+        {
+          "site": "0x386bc",
+          "instruction": "cbz w0, #0x38774",
+          "target": "0x38774"
+        },
+        {
+          "site": "0x38710",
+          "instruction": "cbz x8, #0x38728",
+          "target": "0x38728"
+        },
+        {
+          "site": "0x3872c",
+          "instruction": "cbz x8, #0x38744",
+          "target": "0x38744"
+        },
+        {
+          "site": "0x38750",
+          "instruction": "tbnz w0, #1, #0x38940",
+          "target": "0x38940"
+        },
+        {
+          "site": "0x38780",
+          "instruction": "cbz x0, #0x387d0",
+          "target": "0x387d0"
+        },
+        {
+          "site": "0x38798",
+          "instruction": "cbz w0, #0x3880c",
+          "target": "0x3880c"
+        },
+        {
+          "site": "0x38814",
+          "instruction": "cbz x8, #0x3882c",
+          "target": "0x3882c"
+        },
+        {
+          "site": "0x3884c",
+          "instruction": "cbz x8, #0x38864",
+          "target": "0x38864"
+        },
+        {
+          "site": "0x38868",
+          "instruction": "cbz x8, #0x38880",
+          "target": "0x38880"
+        },
+        {
+          "site": "0x38880",
+          "instruction": "cbz w20, #0x388b4",
+          "target": "0x388b4"
+        },
+        {
+          "site": "0x388d8",
+          "instruction": "cbz w0, #0x386fc",
+          "target": "0x386fc"
+        },
+        {
+          "site": "0x38918",
+          "instruction": "tbz w8, #0, #0x386fc",
+          "target": "0x386fc"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN7android21OplusScreenShotHelper19removeEventListenerERKNS_2spINS_3gui24IOplusScreenShotListenerEEE",
+      "address": "0x38948",
+      "size": 792,
+      "file": "00038948__ZN7android21OplusScreenShotHelper19removeEventListenerERKNS_2spINS_3gui24IOplusScreenShotListenerEEE.asm.txt",
+      "calls": [
+        {
+          "site": "0x38968",
+          "target": "0x3b6a8",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x38974",
+          "target": "0x3b678",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x38980",
+          "target": "0x3be70",
+          "symbol": "_ZN7android15ComposerService18getComposerServiceEv"
+        },
+        {
+          "site": "0x389a4",
+          "target": "0x3b240",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x389b0",
+          "target": "0x3be88",
+          "symbol": "_ZN7android10IInterface8asBinderERKNS_2spIS0_EE"
+        },
+        {
+          "site": "0x389cc",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x389ec",
+          "target": "0x3b330",
+          "symbol": "_ZN7android6ParcelC1Ev"
+        },
+        {
+          "site": "0x38a0c",
+          "target": "0x3b330",
+          "symbol": "_ZN7android6ParcelC1Ev"
+        },
+        {
+          "site": "0x38a28",
+          "target": "0x3bac8",
+          "symbol": "_ZN7android6Parcel19writeInterfaceTokenERKNS_8String16E"
+        },
+        {
+          "site": "0x38a38",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x38a6c",
+          "target": "0x3b048",
+          "symbol": "_ZN7android6Parcel10writeInt32Ei"
+        },
+        {
+          "site": "0x38a7c",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x38ac4",
+          "target": "0x3b240",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x38ad0",
+          "target": "0x3be88",
+          "symbol": "_ZN7android10IInterface8asBinderERKNS_2spIS0_EE"
+        },
+        {
+          "site": "0x38adc",
+          "target": "0x3bea0",
+          "symbol": "_ZN7android6Parcel17writeStrongBinderERKNS_2spINS_7IBinderEEE"
+        },
+        {
+          "site": "0x38afc",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38b18",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38b24",
+          "target": "0x3ac70",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x38b54",
+          "target": "0x3ac58",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x38b5c",
+          "target": "0x3b348",
+          "symbol": "_ZN7android6ParcelD1Ev"
+        },
+        {
+          "site": "0x38b64",
+          "target": "0x3b348",
+          "symbol": "_ZN7android6ParcelD1Ev"
+        },
+        {
+          "site": "0x38b80",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38b9c",
+          "target": "0x3b288",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x38ba4",
+          "target": "0x3b690",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x38ba8",
+          "target": "0x3b6a8",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x38c00",
+          "target": "0x3beb8",
+          "symbol": "_ZN7android14statusToStringEi"
+        },
+        {
+          "site": "0x38c28",
+          "target": "0x3ac58",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x38c40",
+          "target": "0x3ab98",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x38c50",
+          "target": "0x3b6c0",
+          "symbol": "atrace_begin_body"
+        },
+        {
+          "site": "0x38c58",
+          "target": "0x3b6d8",
+          "symbol": "atrace_end_body"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x3896c",
+          "instruction": "tbnz w0, #1, #0x38c48",
+          "target": "0x38c48"
+        },
+        {
+          "site": "0x38990",
+          "instruction": "cbz x8, #0x389a8",
+          "target": "0x389a8"
+        },
+        {
+          "site": "0x389b8",
+          "instruction": "cbz x8, #0x389d0",
+          "target": "0x389d0"
+        },
+        {
+          "site": "0x38a2c",
+          "instruction": "cbz w0, #0x38a64",
+          "target": "0x38a64"
+        },
+        {
+          "site": "0x38a70",
+          "instruction": "cbz w0, #0x38aa8",
+          "target": "0x38aa8"
+        },
+        {
+          "site": "0x38ab0",
+          "instruction": "cbz x8, #0x38ac8",
+          "target": "0x38ac8"
+        },
+        {
+          "site": "0x38ae8",
+          "instruction": "cbz x8, #0x38b00",
+          "target": "0x38b00"
+        },
+        {
+          "site": "0x38b04",
+          "instruction": "cbz x8, #0x38b1c",
+          "target": "0x38b1c"
+        },
+        {
+          "site": "0x38b1c",
+          "instruction": "cbz w20, #0x38bcc",
+          "target": "0x38bcc"
+        },
+        {
+          "site": "0x38b6c",
+          "instruction": "cbz x8, #0x38b84",
+          "target": "0x38b84"
+        },
+        {
+          "site": "0x38b88",
+          "instruction": "cbz x8, #0x38ba0",
+          "target": "0x38ba0"
+        },
+        {
+          "site": "0x38bac",
+          "instruction": "tbnz w0, #1, #0x38c58",
+          "target": "0x38c58"
+        },
+        {
+          "site": "0x38bf0",
+          "instruction": "cbz w0, #0x38b58",
+          "target": "0x38b58"
+        },
+        {
+          "site": "0x38c30",
+          "instruction": "tbz w8, #0, #0x38b58",
+          "target": "0x38b58"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN7android21OplusScreenShotHelperC2Ev",
+      "address": "0x38c60",
+      "size": 88,
+      "file": "00038c60__ZN7android21OplusScreenShotHelperC2Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x38c74",
+          "target": "0x3bed0",
+          "symbol": "_ZN7android7RefBaseC2Ev"
+        },
+        {
+          "site": "0x38cb4",
+          "target": "0x3ac58",
+          "symbol": "__android_log_print"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZN7android21OplusScreenShotHelperD1Ev",
+      "address": "0x38cb8",
+      "size": 92,
+      "file": "00038cb8__ZN7android21OplusScreenShotHelperD1Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x38cf4",
+          "target": "0x3ac58",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x38cfc",
+          "target": "0x3ae68",
+          "symbol": "_ZNSt3__15mutexD1Ev"
+        },
+        {
+          "site": "0x38d10",
+          "target": "0x3bee8",
+          "symbol": "_ZN7android7RefBaseD2Ev"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZN7android21OplusScreenShotHelperD0Ev",
+      "address": "0x38d14",
+      "size": 48,
+      "file": "00038d14__ZN7android21OplusScreenShotHelperD0Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x38d28",
+          "target": "0x3c9b0",
+          "symbol": "_ZN7android21OplusScreenShotHelperD1Ev"
+        },
+        {
+          "site": "0x38d40",
+          "target": "0x3ab98",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": []
+    }
+  ]
+}

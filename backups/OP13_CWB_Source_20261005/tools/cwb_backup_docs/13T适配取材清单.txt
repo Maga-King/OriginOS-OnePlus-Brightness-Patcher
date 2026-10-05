@@ -1,0 +1,69 @@
+一加13T继续适配CWB：取材与参数清单
+日期：2026-10-05
+
+这是图中“拿现有OP13源码按13T规格修改”的交接清单，不是13T已实测完成声明。
+
+1. 真实硬件与当前已有官方资料
+PKX110，project24821，SM8750；系统伪装为Vivo型号不改变真实面板。
+已收到的面板：AA594_P_7_A0020_dsc_cmd_mode_panel。
+Fusion样例：/my_product/etc/fusionlight_profile/fusionlight_Main_2_3.json。
+原生尺寸1216×2640；ROI[732,100,771,138)，39×38=1482像素；周期250ms。
+normal3515、peak4094是这份官方材料的读值，不是先硬编码的假设。
+权重：/odm/etc/display/cwb_weightspos.json，必须与ROI/像素数相符。
+一加13的1440×3168、1010,148—1048,190、1596权重不能复制到13T。
+
+2. 13T官方ColorOS端必须取
+/my_product/etc/fusionlight_profile/ 全目录。
+/odm/etc/display/cwb_weights*.json。
+/system/lib64/libcwb_client.so（若在别分区按实际路径）。
+vendor.oplus.hardware.cwb@1.0.so。
+vendor.oplus.hardware.cwb-V2-ndk.so。
+vendor.oplus.hardware.displaypanelfeature@1.0.so。
+/vendor/lib64/libcwb_qcom_aidl.so、libsdmclient.so、libsdmcore.so。
+官方sensorservice/Fusion扩展库及其NEEDED依赖，system_ext存在的也取。
+显示/光感相关init、VINTF；system_ext/oplus/sys_sensor_config.xml存在时手动补提。
+system/vendor/odm/my_product/system_ext的颜色、CWB、工程号、分辨率相关prop。
+官方系统运行时：dumpsys display/sensorservice/SF、节点标签、真实面板和分辨率。
+本机W_VIEW校准只能在自己的物理设备读取；不要向别人要persist来套用。
+
+3. 13T OriginOS端必须取
+/system/lib64/libsensorservice.so 原件。
+/system/lib64/libsensorcompat_ovsc.so 当前已工作适配库（有则取）。
+/system/lib64/libsensorservice_ex.so 与依赖（有则取）。
+/system/bin/surfaceflinger、/system/lib64/libgui.so、libui.so、libbinder_ndk.so。
+/vendor/lib64/libcwb_qcom_aidl.so、libsdmclient.so、libsdmcore.so。
+/system/etc/LcmConfig/、/system/etc/SensorConfig/。
+/vendor/etc/vivo_config.ini与全部已有SKU变体。
+当前完整SELinux输入、真实AVC、ls -lZ节点标签、PID maps。
+匹配的内核和vendor_dlkm/msm_drm.ko及模块启用情况。
+在线采到的文件可能已经受模块覆盖；原件与运行文件分开保存。
+
+4. 必须从代码/实机重新定位的项目
+物理ALS与标准alias的handle/type，完整事件结构、timestamp及各data字段语义。
+标准alias是否仍丢RGBC/DBV/积分/模式/序号；不能假定OP13的0x6a5就是13T。
+libsensorservice真实AIDL/HIDL activate函数及安全trampoline位置。
+目标ELF动态表/字符串填充是否适合短依赖nc.so；条件不符另做设计。
+官方CwbClient私有布局、Record、period、Rect/FloatRect入口与运行服务ABI。
+SSC事务、时钟域、时间窗匹配、工厂校准字段及支持算法分支。
+实际CWB缓冲尺寸/stride/format/ROI；是否有OP13那样的分配布局错误。
+FHD或其它显示模式的缩放关系；13T是否有第二档必须按自己的运行系统确认。
+DC/FOD/SF选择规则与目标SF生产取色能力，不从普通五色通过推断所有模式通过。
+system_server服务查找/Binder、execmem/execmod及显示节点必要权限。
+
+5. 建议分层验收
+先现有Vivo+一加映射的普通亮度/HBM/HDR正确，再接CWB，避免两类问题混调。
+先读完整事件与已有CWB状态；启动候选客户端/写SSC不属于纯只读检查。
+五色跟随＋异位负对照＋实际ROI像素＋补偿计数＋跨颜色/DBV lux稳定性。
+静态LTPO缓存复用、动态页面、亮灭屏、快速停启、指纹解锁、SELinux真实拒绝。
+最后做CPU/回调/待机功耗对照，关闭诊断App/悬浮窗后测生产链路。
+
+6. 已有13T基础包的边界
+当前OP13T_OriginOS_亮度_HDR.zip是解包内置文件资料，不是Magisk安装器。
+该样例sensor_mode=preserve，未修BC05私有HBM lux分派；runtime_consumer_added=false。
+它不包含当前OP13 CWB v5，13T HDR白点、HBM私有lux和CWB待机尚需实机验证。
+full40k是4万lux后请求panel.maximum、2万lux退出；不是4万nit，不越过驱动保护。
+
+7. MIO/DNA路径
+解包system/system/lib64对应在线/system/lib64。
+vendor、odm、my_product一般平铺，不多加system。
+只复制按真实13T取材转换出来的文件；本机错套vendor的恢复A不属于常规适配。

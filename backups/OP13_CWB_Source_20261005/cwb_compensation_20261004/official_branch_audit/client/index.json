@@ -1,0 +1,3367 @@
+{
+  "source": "E:\\MIO\\cwb_compensation_20261004\\coloros_live_client.so",
+  "sha256": "93ff90912b9fec0cf5b93cc900e61e0442729e13a5754ec8542a7c2a7ecac3f0",
+  "coverage": "Function inventory and disassembly, NOT yet a verified semantic reconstruction",
+  "functions": [
+    {
+      "symbol": "_ZN9CwbClientC2Ev",
+      "address": "0x6544",
+      "size": 932,
+      "file": "00006544__ZN9CwbClientC2Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x6560",
+          "target": "0xa4b8",
+          "symbol": "_ZN7android7RefBaseC2Ev"
+        },
+        {
+          "site": "0x6610",
+          "target": "0xa350",
+          "symbol": "_ZN9CwbClient18getCwbService_aidlEv"
+        },
+        {
+          "site": "0x6624",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x6644",
+          "target": "0xaae8",
+          "symbol": "calloc"
+        },
+        {
+          "site": "0x6650",
+          "target": "0xa4b8",
+          "symbol": "_ZN7android7RefBaseC2Ev"
+        },
+        {
+          "site": "0x6658",
+          "target": "0xa8c0",
+          "symbol": "_ZN4aidl6vendor5oplus8hardware3cwb13BnCwbCallbackC2Ev"
+        },
+        {
+          "site": "0x6680",
+          "target": "0xa980",
+          "symbol": "_ZNSt3__119__shared_weak_count4lockEv"
+        },
+        {
+          "site": "0x66c4",
+          "target": "0xa998",
+          "symbol": "_ZNSt3__111__call_onceERVmPvPFvS2_E"
+        },
+        {
+          "site": "0x66e0",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x66fc",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x6718",
+          "target": "0x63d0",
+          "symbol": "__aarch64_ldadd8_relax"
+        },
+        {
+          "site": "0x673c",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x6754",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x6770",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x678c",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x67a0",
+          "target": "0xa380",
+          "symbol": "_ZN9CwbClient13getCwbServiceEv"
+        },
+        {
+          "site": "0x67bc",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x67cc",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x67e8",
+          "target": "0xa4b8",
+          "symbol": "_ZN7android7RefBaseC2Ev"
+        },
+        {
+          "site": "0x681c",
+          "target": "0xa9c8",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x683c",
+          "target": "0xa5a8",
+          "symbol": "_ZN7android8hardware7details13return_statusD2Ev"
+        },
+        {
+          "site": "0x6858",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x6860",
+          "target": "0xa368",
+          "symbol": "_ZN9CwbClient12aiInitConfigEv"
+        },
+        {
+          "site": "0x6870",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x6878",
+          "target": "0xa9e0",
+          "symbol": "_ZNSt3__115__thread_structC1Ev"
+        },
+        {
+          "site": "0x6880",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x689c",
+          "target": "0xaa10",
+          "symbol": "pthread_create"
+        },
+        {
+          "site": "0x68bc",
+          "target": "0xa4e8",
+          "symbol": "_ZNSt3__16threadD1Ev"
+        },
+        {
+          "site": "0x68e0",
+          "target": "0xa9f8",
+          "symbol": "_ZNSt3__120__throw_system_errorEiPKc"
+        },
+        {
+          "site": "0x68e4",
+          "target": "0xa7a0",
+          "symbol": "_ZSt9terminatev"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x6618",
+          "instruction": "cbz x20, #0x662c",
+          "target": "0x662c"
+        },
+        {
+          "site": "0x6628",
+          "instruction": "cbz x0, #0x6778",
+          "target": "0x6778"
+        },
+        {
+          "site": "0x6630",
+          "instruction": "cbz x8, #0x6798",
+          "target": "0x6798"
+        },
+        {
+          "site": "0x667c",
+          "instruction": "cbz x0, #0x6694",
+          "target": "0x6694"
+        },
+        {
+          "site": "0x6688",
+          "instruction": "cbz x0, #0x6694",
+          "target": "0x6694"
+        },
+        {
+          "site": "0x66a8",
+          "instruction": "b.eq #0x66c8",
+          "target": "0x66c8"
+        },
+        {
+          "site": "0x66d4",
+          "instruction": "cbz x20, #0x6704",
+          "target": "0x6704"
+        },
+        {
+          "site": "0x66e4",
+          "instruction": "cbnz x0, #0x6700",
+          "target": "0x6700"
+        },
+        {
+          "site": "0x670c",
+          "instruction": "cbz x8, #0x671c",
+          "target": "0x671c"
+        },
+        {
+          "site": "0x6748",
+          "instruction": "cbz x20, #0x685c",
+          "target": "0x685c"
+        },
+        {
+          "site": "0x6758",
+          "instruction": "cbnz x0, #0x685c",
+          "target": "0x685c"
+        },
+        {
+          "site": "0x6794",
+          "instruction": "cbnz x8, #0x6634",
+          "target": "0x6634"
+        },
+        {
+          "site": "0x67a8",
+          "instruction": "cbz x8, #0x67c0",
+          "target": "0x67c0"
+        },
+        {
+          "site": "0x67c4",
+          "instruction": "cbz x8, #0x6864",
+          "target": "0x6864"
+        },
+        {
+          "site": "0x6844",
+          "instruction": "cbz x8, #0x685c",
+          "target": "0x685c"
+        },
+        {
+          "site": "0x68a0",
+          "instruction": "cbnz w0, #0x68d8",
+          "target": "0x68d8"
+        },
+        {
+          "site": "0x68a8",
+          "instruction": "cbnz x8, #0x68e4",
+          "target": "0x68e4"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient18getCwbService_aidlEv",
+      "address": "0x68e8",
+      "size": 404,
+      "file": "000068e8__ZN9CwbClient18getCwbService_aidlEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x6910",
+          "target": "0xa710",
+          "symbol": "AServiceManager_isDeclared"
+        },
+        {
+          "site": "0x6920",
+          "target": "0xa740",
+          "symbol": "AServiceManager_getService"
+        },
+        {
+          "site": "0x6930",
+          "target": "0xa728",
+          "symbol": "_ZN4aidl6vendor5oplus8hardware3cwb11ICwbService10fromBinderERKN3ndk10SpAIBinderE"
+        },
+        {
+          "site": "0x6950",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x696c",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x6980",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x699c",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x69ac",
+          "target": "0xa830",
+          "symbol": "AIBinder_decStrong"
+        },
+        {
+          "site": "0x69d0",
+          "target": "0xa848",
+          "symbol": "__assert"
+        },
+        {
+          "site": "0x69e8",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x6a24",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x6a44",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6a60",
+          "target": "0x63d0",
+          "symbol": "__aarch64_ldadd8_relax"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x6914",
+          "instruction": "tbz w0, #0, #0x69d4",
+          "target": "0x69d4"
+        },
+        {
+          "site": "0x6944",
+          "instruction": "cbz x21, #0x6970",
+          "target": "0x6970"
+        },
+        {
+          "site": "0x6954",
+          "instruction": "cbnz x0, #0x6970",
+          "target": "0x6970"
+        },
+        {
+          "site": "0x6974",
+          "instruction": "cbz x21, #0x69a0",
+          "target": "0x69a0"
+        },
+        {
+          "site": "0x6984",
+          "instruction": "cbnz x0, #0x69a0",
+          "target": "0x69a0"
+        },
+        {
+          "site": "0x69a4",
+          "instruction": "cbz x21, #0x69b0",
+          "target": "0x69b0"
+        },
+        {
+          "site": "0x69b8",
+          "instruction": "b.eq #0x69f0",
+          "target": "0x69f0"
+        },
+        {
+          "site": "0x69dc",
+          "instruction": "cbz x21, #0x69f0",
+          "target": "0x69f0"
+        },
+        {
+          "site": "0x69ec",
+          "instruction": "cbz x0, #0x6a10",
+          "target": "0x6a10"
+        },
+        {
+          "site": "0x69f4",
+          "instruction": "cbz x8, #0x6a30",
+          "target": "0x6a30"
+        },
+        {
+          "site": "0x6a2c",
+          "instruction": "cbnz x8, #0x69f8",
+          "target": "0x69f8"
+        },
+        {
+          "site": "0x6a54",
+          "instruction": "cbz x8, #0x6a64",
+          "target": "0x6a64"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient12aiInitConfigEv",
+      "address": "0x6a7c",
+      "size": 604,
+      "file": "00006a7c__ZN9CwbClient12aiInitConfigEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x6abc",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x6ae4",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6af4",
+          "target": "0xa5c0",
+          "symbol": "ashmem_create_region"
+        },
+        {
+          "site": "0x6b04",
+          "target": "0xa608",
+          "symbol": "ashmem_set_prot_region"
+        },
+        {
+          "site": "0x6b1c",
+          "target": "0xa620",
+          "symbol": "close"
+        },
+        {
+          "site": "0x6b24",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x6b2c",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x6b44",
+          "target": "0xa770",
+          "symbol": "syslog"
+        },
+        {
+          "site": "0x6b8c",
+          "target": "0xa7e8",
+          "symbol": "AStatus_isOk"
+        },
+        {
+          "site": "0x6bb0",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6bc4",
+          "target": "0xa620",
+          "symbol": "close"
+        },
+        {
+          "site": "0x6bcc",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x6bd4",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x6bec",
+          "target": "0xa770",
+          "symbol": "syslog"
+        },
+        {
+          "site": "0x6bfc",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x6c04",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x6c0c",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x6c28",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6c30",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x6c38",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x6c54",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6c5c",
+          "target": "0xa620",
+          "symbol": "close"
+        },
+        {
+          "site": "0x6c78",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6c8c",
+          "target": "0xa620",
+          "symbol": "close"
+        },
+        {
+          "site": "0x6c94",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x6c9c",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x6cb4",
+          "target": "0xa770",
+          "symbol": "syslog"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x6aa0",
+          "instruction": "cbz x0, #0x6cc0",
+          "target": "0x6cc0"
+        },
+        {
+          "site": "0x6ac8",
+          "instruction": "b.lt #0x6cc0",
+          "target": "0x6cc0"
+        },
+        {
+          "site": "0x6af8",
+          "instruction": "tbnz w0, #0x1f, #0x6c04",
+          "target": "0x6c04"
+        },
+        {
+          "site": "0x6b08",
+          "instruction": "tbnz w0, #0x1f, #0x6c30",
+          "target": "0x6c30"
+        },
+        {
+          "site": "0x6b14",
+          "instruction": "b.eq #0x6b48",
+          "target": "0x6b48"
+        },
+        {
+          "site": "0x6b20",
+          "instruction": "cbz w0, #0x6b48",
+          "target": "0x6b48"
+        },
+        {
+          "site": "0x6b54",
+          "instruction": "cbz x0, #0x6c64",
+          "target": "0x6c64"
+        },
+        {
+          "site": "0x6b88",
+          "instruction": "cbz x0, #0x6b9c",
+          "target": "0x6b9c"
+        },
+        {
+          "site": "0x6b90",
+          "instruction": "tbz w0, #0, #0x6b9c",
+          "target": "0x6b9c"
+        },
+        {
+          "site": "0x6b98",
+          "instruction": "cbz w8, #0x6bf8",
+          "target": "0x6bf8"
+        },
+        {
+          "site": "0x6bbc",
+          "instruction": "b.eq #0x6bf0",
+          "target": "0x6bf0"
+        },
+        {
+          "site": "0x6bc8",
+          "instruction": "cbz w0, #0x6bf0",
+          "target": "0x6bf0"
+        },
+        {
+          "site": "0x6c84",
+          "instruction": "b.eq #0x6cb8",
+          "target": "0x6cb8"
+        },
+        {
+          "site": "0x6c90",
+          "instruction": "cbz w0, #0x6cb8",
+          "target": "0x6cb8"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient13getCwbServiceEv",
+      "address": "0x6cd8",
+      "size": 440,
+      "file": "00006cd8__ZN9CwbClient13getCwbServiceEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x6d28",
+          "target": "0xa6e0",
+          "symbol": "_ZN6vendor5oplus8hardware3cwb4V1_011ICwbService13tryGetServiceERKNSt3__112basic_stringIcNS5_11char_traitsIcEENS5_9allocatorIcEEEEb"
+        },
+        {
+          "site": "0x6d44",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x6d54",
+          "target": "0xaab8",
+          "symbol": "_ZN7android14sp_report_raceEv"
+        },
+        {
+          "site": "0x6d78",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x6da8",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6de4",
+          "target": "0xa6f8",
+          "symbol": "_ZN6vendor5oplus8hardware19displaypanelfeature4V1_020IDisplayPanelFeature10getServiceERKNSt3__112basic_stringIcNS5_11char_traitsIcEENS5_9allocatorIcEEEEb"
+        },
+        {
+          "site": "0x6e00",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x6e10",
+          "target": "0xaab8",
+          "symbol": "_ZN7android14sp_report_raceEv"
+        },
+        {
+          "site": "0x6e34",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x6e54",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x6e74",
+          "target": "0xa9c8",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x6d30",
+          "instruction": "cbz x21, #0x6d48",
+          "target": "0x6d48"
+        },
+        {
+          "site": "0x6d50",
+          "instruction": "b.eq #0x6d58",
+          "target": "0x6d58"
+        },
+        {
+          "site": "0x6d68",
+          "instruction": "tbz w9, #0, #0x6d80",
+          "target": "0x6d80"
+        },
+        {
+          "site": "0x6d88",
+          "instruction": "cbz x8, #0x6d9c",
+          "target": "0x6d9c"
+        },
+        {
+          "site": "0x6db0",
+          "instruction": "cbnz x8, #0x6e58",
+          "target": "0x6e58"
+        },
+        {
+          "site": "0x6dec",
+          "instruction": "cbz x21, #0x6e04",
+          "target": "0x6e04"
+        },
+        {
+          "site": "0x6e0c",
+          "instruction": "b.eq #0x6e14",
+          "target": "0x6e14"
+        },
+        {
+          "site": "0x6e24",
+          "instruction": "tbz w9, #0, #0x6e3c",
+          "target": "0x6e3c"
+        },
+        {
+          "site": "0x6e3c",
+          "instruction": "cbnz x8, #0x6e58",
+          "target": "0x6e58"
+        },
+        {
+          "site": "0x6e60",
+          "instruction": "cbz x8, #0x6e78",
+          "target": "0x6e78"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClientD2Ev",
+      "address": "0x6e90",
+      "size": 768,
+      "file": "00006e90__ZN9CwbClientD2Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x6ec0",
+          "target": "0xa500",
+          "symbol": "_ZNSt3__118condition_variable10notify_oneEv"
+        },
+        {
+          "site": "0x6ec8",
+          "target": "0xa518",
+          "symbol": "_ZNSt3__16thread4joinEv"
+        },
+        {
+          "site": "0x6ef0",
+          "target": "0xa9c8",
+          "symbol": "_ZNK7android7RefBase9incStrongEPKv"
+        },
+        {
+          "site": "0x6f10",
+          "target": "0xa5a8",
+          "symbol": "_ZN7android8hardware7details13return_statusD2Ev"
+        },
+        {
+          "site": "0x6f2c",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x6f58",
+          "target": "0x63d0",
+          "symbol": "__aarch64_ldadd8_relax"
+        },
+        {
+          "site": "0x6f7c",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x6f94",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x6fb0",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x6fb8",
+          "target": "0xa398",
+          "symbol": "_ZN9CwbClient9aiReleaseEv"
+        },
+        {
+          "site": "0x6ff0",
+          "target": "0xa4a0",
+          "symbol": "_ZNSt3__15mutexD1Ev"
+        },
+        {
+          "site": "0x7004",
+          "target": "0xa620",
+          "symbol": "close"
+        },
+        {
+          "site": "0x700c",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x7014",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x702c",
+          "target": "0xa770",
+          "symbol": "syslog"
+        },
+        {
+          "site": "0x703c",
+          "target": "0xa4a0",
+          "symbol": "_ZNSt3__15mutexD1Ev"
+        },
+        {
+          "site": "0x7050",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x706c",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x7080",
+          "target": "0x6020",
+          "symbol": "__aarch64_ldadd8_acq_rel"
+        },
+        {
+          "site": "0x709c",
+          "target": "0xa8a8",
+          "symbol": "_ZNSt3__119__shared_weak_count14__release_weakEv"
+        },
+        {
+          "site": "0x70b8",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x70d4",
+          "target": "0xa860",
+          "symbol": "_ZNK7android7RefBase9decStrongEPKv"
+        },
+        {
+          "site": "0x70dc",
+          "target": "0xa4a0",
+          "symbol": "_ZNSt3__15mutexD1Ev"
+        },
+        {
+          "site": "0x70f4",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x710c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x7114",
+          "target": "0xa4a0",
+          "symbol": "_ZNSt3__15mutexD1Ev"
+        },
+        {
+          "site": "0x711c",
+          "target": "0x9824",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listINS_5tupleIJlNS_5arrayIhLm3EEEiEEENS_9allocatorIS8_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_SB_EENS_4lessIS3_EELb1EEENS9_ISG_EEE7destroyEPNS_11__tree_nodeISC_PvEE"
+        },
+        {
+          "site": "0x7124",
+          "target": "0xa530",
+          "symbol": "_ZNSt3__118condition_variableD1Ev"
+        },
+        {
+          "site": "0x712c",
+          "target": "0xa4a0",
+          "symbol": "_ZNSt3__15mutexD1Ev"
+        },
+        {
+          "site": "0x7134",
+          "target": "0xa4e8",
+          "symbol": "_ZNSt3__16threadD1Ev"
+        },
+        {
+          "site": "0x713c",
+          "target": "0xa548",
+          "symbol": "_ZN7android7RefBaseD2Ev"
+        },
+        {
+          "site": "0x7160",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x7188",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x6ed0",
+          "instruction": "cbz x20, #0x6f34",
+          "target": "0x6f34"
+        },
+        {
+          "site": "0x6edc",
+          "instruction": "cbz x8, #0x6ef4",
+          "target": "0x6ef4"
+        },
+        {
+          "site": "0x6f18",
+          "instruction": "cbz x8, #0x6fb4",
+          "target": "0x6fb4"
+        },
+        {
+          "site": "0x6f38",
+          "instruction": "cbz x20, #0x6fb4",
+          "target": "0x6fb4"
+        },
+        {
+          "site": "0x6f4c",
+          "instruction": "cbz x8, #0x6f5c",
+          "target": "0x6f5c"
+        },
+        {
+          "site": "0x6f88",
+          "instruction": "cbz x20, #0x6fb4",
+          "target": "0x6fb4"
+        },
+        {
+          "site": "0x6f98",
+          "instruction": "cbnz x0, #0x6fb4",
+          "target": "0x6fb4"
+        },
+        {
+          "site": "0x6fc0",
+          "instruction": "cbz x8, #0x6fec",
+          "target": "0x6fec"
+        },
+        {
+          "site": "0x6fe8",
+          "instruction": "b.ne #0x7170",
+          "target": "0x7170"
+        },
+        {
+          "site": "0x6ffc",
+          "instruction": "b.eq #0x7030",
+          "target": "0x7030"
+        },
+        {
+          "site": "0x7008",
+          "instruction": "cbz w0, #0x7030",
+          "target": "0x7030"
+        },
+        {
+          "site": "0x7044",
+          "instruction": "cbz x20, #0x7070",
+          "target": "0x7070"
+        },
+        {
+          "site": "0x7054",
+          "instruction": "cbnz x0, #0x7070",
+          "target": "0x7070"
+        },
+        {
+          "site": "0x7074",
+          "instruction": "cbz x20, #0x70a0",
+          "target": "0x70a0"
+        },
+        {
+          "site": "0x7084",
+          "instruction": "cbnz x0, #0x70a0",
+          "target": "0x70a0"
+        },
+        {
+          "site": "0x70a4",
+          "instruction": "cbz x8, #0x70bc",
+          "target": "0x70bc"
+        },
+        {
+          "site": "0x70c0",
+          "instruction": "cbz x8, #0x70d8",
+          "target": "0x70d8"
+        },
+        {
+          "site": "0x70e4",
+          "instruction": "cbz x0, #0x70f8",
+          "target": "0x70f8"
+        },
+        {
+          "site": "0x70fc",
+          "instruction": "cbz x0, #0x7110",
+          "target": "0x7110"
+        },
+        {
+          "site": "0x716c",
+          "instruction": "b.eq #0x6fec",
+          "target": "0x6fec"
+        },
+        {
+          "site": "0x7178",
+          "instruction": "cbz x0, #0x7158",
+          "target": "0x7158"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient9aiReleaseEv",
+      "address": "0x7190",
+      "size": 148,
+      "file": "00007190__ZN9CwbClient9aiReleaseEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x71b8",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x71c8",
+          "target": "0xa6c8",
+          "symbol": "munmap"
+        },
+        {
+          "site": "0x71dc",
+          "target": "0xa620",
+          "symbol": "close"
+        },
+        {
+          "site": "0x71e4",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x71ec",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x7204",
+          "target": "0xa770",
+          "symbol": "syslog"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x71c0",
+          "instruction": "cbz x0, #0x71d0",
+          "target": "0x71d0"
+        },
+        {
+          "site": "0x71d4",
+          "instruction": "tbnz w20, #0x1f, #0x7210",
+          "target": "0x7210"
+        },
+        {
+          "site": "0x71e0",
+          "instruction": "cbz w0, #0x7208",
+          "target": "0x7208"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClientD0Ev",
+      "address": "0x7224",
+      "size": 48,
+      "file": "00007224__ZN9CwbClientD0Ev.asm.txt",
+      "calls": [
+        {
+          "site": "0x7238",
+          "target": "0xa458",
+          "symbol": "_ZN9CwbClientD1Ev"
+        },
+        {
+          "site": "0x7250",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZN9CwbClient24setCWBScreenShotCallbackEPFvR9Rgb_valusE",
+      "address": "0x7254",
+      "size": 92,
+      "file": "00007254__ZN9CwbClient24setCWBScreenShotCallbackEPFvR9Rgb_valusE.asm.txt",
+      "calls": [
+        {
+          "site": "0x7270",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x7294",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x72ac",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x727c",
+          "instruction": "b.ne #0x7298",
+          "target": "0x7298"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient17setCWBDisplayTypeEj",
+      "address": "0x72b0",
+      "size": 132,
+      "file": "000072b0__ZN9CwbClient17setCWBDisplayTypeEj.asm.txt",
+      "calls": [
+        {
+          "site": "0x7308",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7330",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x72c0",
+          "instruction": "b.eq #0x72e4",
+          "target": "0x72e4"
+        },
+        {
+          "site": "0x72c8",
+          "instruction": "cbnz w1, #0x730c",
+          "target": "0x730c"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient10threadLoopEv",
+      "address": "0x7334",
+      "size": 2464,
+      "file": "00007334__ZN9CwbClient10threadLoopEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x7370",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x73ac",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x73cc",
+          "target": "0xaa70",
+          "symbol": "_ZNSt3__118condition_variable4waitERNS_11unique_lockINS_5mutexEEE"
+        },
+        {
+          "site": "0x73fc",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x7444",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x7460",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x7488",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x74a0",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x74b8",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x74d0",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x74f0",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x7564",
+          "target": "0xa7e8",
+          "symbol": "AStatus_isOk"
+        },
+        {
+          "site": "0x7574",
+          "target": "0xa3c8",
+          "symbol": "_ZN9CwbClient18startAiLightSensorEv"
+        },
+        {
+          "site": "0x75c4",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x7658",
+          "target": "0xa590",
+          "symbol": "systemTime"
+        },
+        {
+          "site": "0x7698",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x76d8",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x76f8",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x771c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7824",
+          "target": "0xa5a8",
+          "symbol": "_ZN7android8hardware7details13return_statusD2Ev"
+        },
+        {
+          "site": "0x7850",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x7870",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x789c",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x78c4",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x78d8",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x78e8",
+          "target": "0x9c74",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listI9Rgb_valusNS_9allocatorIS5_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_S8_EENS_4lessIS3_EELb1EEENS6_ISD_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS_5tupleIJRSC_EEENSN_IJEEEEEENSB_INS_15__tree_iteratorIS9_PNS_11__tree_nodeIS9_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x78f8",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x7938",
+          "target": "0x9c74",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listI9Rgb_valusNS_9allocatorIS5_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_S8_EENS_4lessIS3_EELb1EEENS6_ISD_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS_5tupleIJRSC_EEENSN_IJEEEEEENSB_INS_15__tree_iteratorIS9_PNS_11__tree_nodeIS9_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x7954",
+          "target": "0x9c74",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listI9Rgb_valusNS_9allocatorIS5_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_S8_EENS_4lessIS3_EELb1EEENS6_ISD_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS_5tupleIJRSC_EEENSN_IJEEEEEENSB_INS_15__tree_iteratorIS9_PNS_11__tree_nodeIS9_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x7980",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x7990",
+          "target": "0x9c74",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listI9Rgb_valusNS_9allocatorIS5_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_S8_EENS_4lessIS3_EELb1EEENS6_ISD_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS_5tupleIJRSC_EEENSN_IJEEEEEENSB_INS_15__tree_iteratorIS9_PNS_11__tree_nodeIS9_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x79a8",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x79b0",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x79c8",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x79ec",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7a6c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7aa0",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x7ac8",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7adc",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x7ae4",
+          "target": "0xa5a8",
+          "symbol": "_ZN7android8hardware7details13return_statusD2Ev"
+        },
+        {
+          "site": "0x7b38",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7b40",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x7b54",
+          "target": "0xa198",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listINS_5tupleIJlNS_5arrayIhLm3EEEiEEENS_9allocatorIS8_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_SB_EENS_4lessIS3_EELb1EEENS9_ISG_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS5_IJRSF_EEENS5_IJEEEEEENSE_INS_15__tree_iteratorISC_PNS_11__tree_nodeISC_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x7b7c",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x7bb4",
+          "target": "0xa198",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listINS_5tupleIJlNS_5arrayIhLm3EEEiEEENS_9allocatorIS8_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_SB_EENS_4lessIS3_EELb1EEENS9_ISG_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS5_IJRSF_EEENS5_IJEEEEEENSE_INS_15__tree_iteratorISC_PNS_11__tree_nodeISC_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x7bd8",
+          "target": "0xa198",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listINS_5tupleIJlNS_5arrayIhLm3EEEiEEENS_9allocatorIS8_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_SB_EENS_4lessIS3_EELb1EEENS9_ISG_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS5_IJRSF_EEENS5_IJEEEEEENSE_INS_15__tree_iteratorISC_PNS_11__tree_nodeISC_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x7c04",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x7c14",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x7c38",
+          "target": "0xaaa0",
+          "symbol": "_ZNSt3__111this_thread9sleep_forERKNS_6chrono8durationIxNS_5ratioILl1ELl1000000000EEEEE"
+        },
+        {
+          "site": "0x7c3c",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x7c5c",
+          "target": "0xa7b8",
+          "symbol": "atrace_begin_body"
+        },
+        {
+          "site": "0x7c64",
+          "target": "0xa800",
+          "symbol": "atrace_end_body"
+        },
+        {
+          "site": "0x7c7c",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x7c98",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7cc0",
+          "target": "0x9780",
+          "symbol": "_ZNSt3__16vectorI9Rgb_valusNS_9allocatorIS1_EEE20__throw_length_errorB8nn220000Ev"
+        },
+        {
+          "site": "0x7cd0",
+          "target": "0xa9f8",
+          "symbol": "_ZNSt3__120__throw_system_errorEiPKc"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x737c",
+          "instruction": "b.ne #0x7c84",
+          "target": "0x7c84"
+        },
+        {
+          "site": "0x73a0",
+          "instruction": "tbz w8, #0, #0x7c84",
+          "target": "0x7c84"
+        },
+        {
+          "site": "0x73b8",
+          "instruction": "b.gt #0x73d4",
+          "target": "0x73d4"
+        },
+        {
+          "site": "0x73c0",
+          "instruction": "tbz w8, #0, #0x73d4",
+          "target": "0x73d4"
+        },
+        {
+          "site": "0x73ec",
+          "instruction": "b.ls #0x746c",
+          "target": "0x746c"
+        },
+        {
+          "site": "0x73f0",
+          "instruction": "cbz x22, #0x740c",
+          "target": "0x740c"
+        },
+        {
+          "site": "0x7414",
+          "instruction": "cbnz x10, #0x7cc0",
+          "target": "0x7cc0"
+        },
+        {
+          "site": "0x7438",
+          "instruction": "cbnz x9, #0x7cc0",
+          "target": "0x7cc0"
+        },
+        {
+          "site": "0x7478",
+          "instruction": "b.ls #0x74ac",
+          "target": "0x74ac"
+        },
+        {
+          "site": "0x74c8",
+          "instruction": "tbz w9, #0, #0x7cc4",
+          "target": "0x7cc4"
+        },
+        {
+          "site": "0x74e0",
+          "instruction": "b.eq #0x739c",
+          "target": "0x739c"
+        },
+        {
+          "site": "0x74f4",
+          "instruction": "tbnz w0, #1, #0x7c54",
+          "target": "0x7c54"
+        },
+        {
+          "site": "0x7510",
+          "instruction": "cbz x0, #0x7598",
+          "target": "0x7598"
+        },
+        {
+          "site": "0x7560",
+          "instruction": "cbz x0, #0x756c",
+          "target": "0x756c"
+        },
+        {
+          "site": "0x7568",
+          "instruction": "tbnz w0, #0, #0x7570",
+          "target": "0x7570"
+        },
+        {
+          "site": "0x7580",
+          "instruction": "b.ne #0x762c",
+          "target": "0x762c"
+        },
+        {
+          "site": "0x759c",
+          "instruction": "cbz x23, #0x770c",
+          "target": "0x770c"
+        },
+        {
+          "site": "0x761c",
+          "instruction": "b.eq #0x772c",
+          "target": "0x772c"
+        },
+        {
+          "site": "0x7620",
+          "instruction": "cbz x0, #0x773c",
+          "target": "0x773c"
+        },
+        {
+          "site": "0x7638",
+          "instruction": "b.lo #0x7660",
+          "target": "0x7660"
+        },
+        {
+          "site": "0x766c",
+          "instruction": "b.lo #0x769c",
+          "target": "0x769c"
+        },
+        {
+          "site": "0x7674",
+          "instruction": "cbz w3, #0x7684",
+          "target": "0x7684"
+        },
+        {
+          "site": "0x7678",
+          "instruction": "cbz w4, #0x7684",
+          "target": "0x7684"
+        },
+        {
+          "site": "0x7680",
+          "instruction": "cbnz w9, #0x769c",
+          "target": "0x769c"
+        },
+        {
+          "site": "0x76a0",
+          "instruction": "cbnz w8, #0x79ac",
+          "target": "0x79ac"
+        },
+        {
+          "site": "0x76b0",
+          "instruction": "b.ne #0x785c",
+          "target": "0x785c"
+        },
+        {
+          "site": "0x76c4",
+          "instruction": "tbz w9, #0, #0x7840",
+          "target": "0x7840"
+        },
+        {
+          "site": "0x7704",
+          "instruction": "cbnz w25, #0x79ac",
+          "target": "0x79ac"
+        },
+        {
+          "site": "0x7724",
+          "instruction": "cbnz w8, #0x79d4",
+          "target": "0x79d4"
+        },
+        {
+          "site": "0x7744",
+          "instruction": "cbz w8, #0x7750",
+          "target": "0x7750"
+        },
+        {
+          "site": "0x7758",
+          "instruction": "b.ne #0x7770",
+          "target": "0x7770"
+        },
+        {
+          "site": "0x77a0",
+          "instruction": "b.ne #0x77d0",
+          "target": "0x77d0"
+        },
+        {
+          "site": "0x77b0",
+          "instruction": "b.ne #0x77d0",
+          "target": "0x77d0"
+        },
+        {
+          "site": "0x77c0",
+          "instruction": "b.ne #0x77d0",
+          "target": "0x77d0"
+        },
+        {
+          "site": "0x77ec",
+          "instruction": "cbz x0, #0x7a04",
+          "target": "0x7a04"
+        },
+        {
+          "site": "0x7830",
+          "instruction": "b.eq #0x79f4",
+          "target": "0x79f4"
+        },
+        {
+          "site": "0x7834",
+          "instruction": "cbz x0, #0x7a04",
+          "target": "0x7a04"
+        },
+        {
+          "site": "0x7864",
+          "instruction": "b.ne #0x79ac",
+          "target": "0x79ac"
+        },
+        {
+          "site": "0x78a4",
+          "instruction": "cbz x8, #0x78d4",
+          "target": "0x78d4"
+        },
+        {
+          "site": "0x78b0",
+          "instruction": "b.ne #0x78cc",
+          "target": "0x78cc"
+        },
+        {
+          "site": "0x7944",
+          "instruction": "b.lo #0x79a0",
+          "target": "0x79a0"
+        },
+        {
+          "site": "0x799c",
+          "instruction": "b.hi #0x7948",
+          "target": "0x7948"
+        },
+        {
+          "site": "0x79b8",
+          "instruction": "cbz x0, #0x79cc",
+          "target": "0x79cc"
+        },
+        {
+          "site": "0x79d0",
+          "instruction": "cbz w8, #0x7af0",
+          "target": "0x7af0"
+        },
+        {
+          "site": "0x79d8",
+          "instruction": "cbz w8, #0x7af0",
+          "target": "0x7af0"
+        },
+        {
+          "site": "0x7a0c",
+          "instruction": "b.eq #0x7a48",
+          "target": "0x7a48"
+        },
+        {
+          "site": "0x7a14",
+          "instruction": "b.eq #0x7a34",
+          "target": "0x7a34"
+        },
+        {
+          "site": "0x7a1c",
+          "instruction": "b.ne #0x7a5c",
+          "target": "0x7a5c"
+        },
+        {
+          "site": "0x7aa8",
+          "instruction": "cbz x8, #0x7ad8",
+          "target": "0x7ad8"
+        },
+        {
+          "site": "0x7ab4",
+          "instruction": "b.ne #0x7ad0",
+          "target": "0x7ad0"
+        },
+        {
+          "site": "0x7aec",
+          "instruction": "cbnz w8, #0x79d4",
+          "target": "0x79d4"
+        },
+        {
+          "site": "0x7af8",
+          "instruction": "b.ne #0x7b3c",
+          "target": "0x7b3c"
+        },
+        {
+          "site": "0x7bc4",
+          "instruction": "b.ls #0x7c10",
+          "target": "0x7c10"
+        },
+        {
+          "site": "0x7c20",
+          "instruction": "b.lt #0x7c3c",
+          "target": "0x7c3c"
+        },
+        {
+          "site": "0x7c40",
+          "instruction": "tbnz w0, #1, #0x7c64",
+          "target": "0x7c64"
+        },
+        {
+          "site": "0x7c4c",
+          "instruction": "b.ne #0x74e4",
+          "target": "0x74e4"
+        },
+        {
+          "site": "0x7c74",
+          "instruction": "b.ne #0x739c",
+          "target": "0x739c"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient18startAiLightSensorEv",
+      "address": "0x7cd4",
+      "size": 412,
+      "file": "00007cd4__ZN9CwbClient18startAiLightSensorEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x7d10",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x7d88",
+          "target": "0xa7e8",
+          "symbol": "AStatus_isOk"
+        },
+        {
+          "site": "0x7dc0",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7ddc",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7dec",
+          "target": "0xa7e8",
+          "symbol": "AStatus_isOk"
+        },
+        {
+          "site": "0x7e08",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7e2c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7e38",
+          "target": "0xa3f8",
+          "symbol": "_ZN9CwbClient24getAiBufferFromSharedMemERl"
+        },
+        {
+          "site": "0x7e40",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x7e58",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x7cf4",
+          "instruction": "cbz x0, #0x7e5c",
+          "target": "0x7e5c"
+        },
+        {
+          "site": "0x7d1c",
+          "instruction": "b.lt #0x7e5c",
+          "target": "0x7e5c"
+        },
+        {
+          "site": "0x7d30",
+          "instruction": "b.ne #0x7e5c",
+          "target": "0x7e5c"
+        },
+        {
+          "site": "0x7d38",
+          "instruction": "cbz x0, #0x7e5c",
+          "target": "0x7e5c"
+        },
+        {
+          "site": "0x7d50",
+          "instruction": "tbnz w3, #0x1f, #0x7dc8",
+          "target": "0x7dc8"
+        },
+        {
+          "site": "0x7d84",
+          "instruction": "cbz x0, #0x7e3c",
+          "target": "0x7e3c"
+        },
+        {
+          "site": "0x7d8c",
+          "instruction": "tbz w0, #0, #0x7de4",
+          "target": "0x7de4"
+        },
+        {
+          "site": "0x7d98",
+          "instruction": "b.eq #0x7de4",
+          "target": "0x7de4"
+        },
+        {
+          "site": "0x7da4",
+          "instruction": "cbz w3, #0x7e10",
+          "target": "0x7e10"
+        },
+        {
+          "site": "0x7da8",
+          "instruction": "cbz w8, #0x7e3c",
+          "target": "0x7e3c"
+        },
+        {
+          "site": "0x7de8",
+          "instruction": "cbz x0, #0x7e3c",
+          "target": "0x7e3c"
+        },
+        {
+          "site": "0x7df0",
+          "instruction": "tbz w0, #0, #0x7e3c",
+          "target": "0x7e3c"
+        },
+        {
+          "site": "0x7e10",
+          "instruction": "cbz w8, #0x7e30",
+          "target": "0x7e30"
+        },
+        {
+          "site": "0x7e48",
+          "instruction": "cbz x0, #0x7e5c",
+          "target": "0x7e5c"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient19getInterfaceVersionEv",
+      "address": "0x7e70",
+      "size": 76,
+      "file": "00007e70__ZN9CwbClient19getInterfaceVersionEv.asm.txt",
+      "calls": [
+        {
+          "site": "0x7ea4",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x7e88",
+          "instruction": "cbz x0, #0x7eac",
+          "target": "0x7eac"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient13setLigthModelEj",
+      "address": "0x7ebc",
+      "size": 232,
+      "file": "00007ebc__ZN9CwbClient13setLigthModelEj.asm.txt",
+      "calls": [
+        {
+          "site": "0x7efc",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x7f58",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x7f70",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x7f8c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x7edc",
+          "instruction": "cbz x0, #0x7f90",
+          "target": "0x7f90"
+        },
+        {
+          "site": "0x7f08",
+          "instruction": "b.lt #0x7f90",
+          "target": "0x7f90"
+        },
+        {
+          "site": "0x7f20",
+          "instruction": "tbnz w3, #0x1f, #0x7f78",
+          "target": "0x7f78"
+        },
+        {
+          "site": "0x7f60",
+          "instruction": "cbz x0, #0x7f90",
+          "target": "0x7f90"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient16switchToAiSensorEj",
+      "address": "0x7fa4",
+      "size": 88,
+      "file": "00007fa4__ZN9CwbClient16switchToAiSensorEj.asm.txt",
+      "calls": [
+        {
+          "site": "0x7fd4",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x7ff8",
+          "target": "0xa3e0",
+          "symbol": "_ZN9CwbClient13setLigthModelEj"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZN9CwbClient19getScreenResolutionEN7android4RectERNSt3__16vectorIiNS2_9allocatorIiEEEE",
+      "address": "0x7ffc",
+      "size": 448,
+      "file": "00007ffc__ZN9CwbClient19getScreenResolutionEN7android4RectERNSt3__16vectorIiNS2_9allocatorIiEEEE.asm.txt",
+      "calls": [
+        {
+          "site": "0x8048",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x80b0",
+          "target": "0xa7e8",
+          "symbol": "AStatus_isOk"
+        },
+        {
+          "site": "0x80d4",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x80e4",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x80f4",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x8104",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x8114",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x814c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8164",
+          "target": "0xa788",
+          "symbol": "AStatus_delete"
+        },
+        {
+          "site": "0x817c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x819c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8020",
+          "instruction": "cbz x0, #0x8058",
+          "target": "0x8058"
+        },
+        {
+          "site": "0x8054",
+          "instruction": "b.ge #0x8060",
+          "target": "0x8060"
+        },
+        {
+          "site": "0x8064",
+          "instruction": "cbz x0, #0x8188",
+          "target": "0x8188"
+        },
+        {
+          "site": "0x80ac",
+          "instruction": "cbz x0, #0x8158",
+          "target": "0x8158"
+        },
+        {
+          "site": "0x80b4",
+          "instruction": "tbz w0, #0, #0x8158",
+          "target": "0x8158"
+        },
+        {
+          "site": "0x80c4",
+          "instruction": "b.eq #0x815c",
+          "target": "0x815c"
+        },
+        {
+          "site": "0x80cc",
+          "instruction": "b.lo #0x815c",
+          "target": "0x815c"
+        },
+        {
+          "site": "0x8120",
+          "instruction": "b.ne #0x8150",
+          "target": "0x8150"
+        },
+        {
+          "site": "0x816c",
+          "instruction": "cbz x0, #0x8180",
+          "target": "0x8180"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient24getAiBufferFromSharedMemERl",
+      "address": "0x82a8",
+      "size": 568,
+      "file": "000082a8__ZN9CwbClient24getAiBufferFromSharedMemERl.asm.txt",
+      "calls": [
+        {
+          "site": "0x82e4",
+          "target": "0xa6b0",
+          "symbol": "ashmem_get_size_region"
+        },
+        {
+          "site": "0x8300",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x8310",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x8350",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x835c",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x8374",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x8388",
+          "target": "0xa410",
+          "symbol": "_ZN9CwbClient16handleScreenShotElNSt3__16vectorIhNS0_9allocatorIhEEEE"
+        },
+        {
+          "site": "0x839c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x83bc",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x83dc",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x83f8",
+          "target": "0xa698",
+          "symbol": "mmap"
+        },
+        {
+          "site": "0x840c",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x8418",
+          "target": "0xa5d8",
+          "symbol": "strerror"
+        },
+        {
+          "site": "0x8438",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x845c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8468",
+          "target": "0xa6c8",
+          "symbol": "munmap"
+        },
+        {
+          "site": "0x8488",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8498",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x82c8",
+          "instruction": "tbnz w3, #0x1f, #0x83a8",
+          "target": "0x83a8"
+        },
+        {
+          "site": "0x82d4",
+          "instruction": "cbz x8, #0x83c4",
+          "target": "0x83c4"
+        },
+        {
+          "site": "0x82f0",
+          "instruction": "b.ne #0x8440",
+          "target": "0x8440"
+        },
+        {
+          "site": "0x8328",
+          "instruction": "b.ne #0x8474",
+          "target": "0x8474"
+        },
+        {
+          "site": "0x8390",
+          "instruction": "cbz x0, #0x83a0",
+          "target": "0x83a0"
+        },
+        {
+          "site": "0x8408",
+          "instruction": "b.hi #0x84a4",
+          "target": "0x84a4"
+        },
+        {
+          "site": "0x84b0",
+          "instruction": "b.hs #0x84d4",
+          "target": "0x84d4"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient16DumpOutputBufferEiPviiil",
+      "address": "0x84e0",
+      "size": 488,
+      "file": "000084e0__ZN9CwbClient16DumpOutputBufferEiPviiil.asm.txt",
+      "calls": [
+        {
+          "site": "0x8558",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x856c",
+          "target": "0xab18",
+          "symbol": "memset"
+        },
+        {
+          "site": "0x8580",
+          "target": "0x86c8",
+          "symbol": "_ZL8snprintfPcU25pass_dynamic_object_size1mPKcz"
+        },
+        {
+          "site": "0x8590",
+          "target": "0xa638",
+          "symbol": "mkdir"
+        },
+        {
+          "site": "0x8598",
+          "target": "0xa5f0",
+          "symbol": "__errno"
+        },
+        {
+          "site": "0x85b4",
+          "target": "0xa650",
+          "symbol": "chmod"
+        },
+        {
+          "site": "0x85d8",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8610",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8644",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8654",
+          "target": "0xab18",
+          "symbol": "memset"
+        },
+        {
+          "site": "0x8670",
+          "target": "0x86c8",
+          "symbol": "_ZL8snprintfPcU25pass_dynamic_object_size1mPKcz"
+        },
+        {
+          "site": "0x8680",
+          "target": "0xa668",
+          "symbol": "fopen"
+        },
+        {
+          "site": "0x869c",
+          "target": "0xa818",
+          "symbol": "fwrite"
+        },
+        {
+          "site": "0x86a4",
+          "target": "0xa680",
+          "symbol": "fclose"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8520",
+          "instruction": "cbz x2, #0x85e0",
+          "target": "0x85e0"
+        },
+        {
+          "site": "0x8594",
+          "instruction": "cbz w0, #0x85a8",
+          "target": "0x85a8"
+        },
+        {
+          "site": "0x85a4",
+          "instruction": "b.ne #0x8614",
+          "target": "0x8614"
+        },
+        {
+          "site": "0x85b8",
+          "instruction": "cbz w0, #0x8648",
+          "target": "0x8648"
+        },
+        {
+          "site": "0x8684",
+          "instruction": "cbz x0, #0x86a8",
+          "target": "0x86a8"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient16handleScreenShotElNSt3__16vectorIhNS0_9allocatorIhEEEE",
+      "address": "0x8748",
+      "size": 272,
+      "file": "00008748__ZN9CwbClient16handleScreenShotElNSt3__16vectorIhNS0_9allocatorIhEEEE.asm.txt",
+      "calls": [
+        {
+          "site": "0x8774",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x8794",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x8800",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x880c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x8834",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8854",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x87c8",
+          "instruction": "b.lo #0x8810",
+          "target": "0x8810"
+        },
+        {
+          "site": "0x87f0",
+          "instruction": "cbz x0, #0x8804",
+          "target": "0x8804"
+        },
+        {
+          "site": "0x8818",
+          "instruction": "b.ne #0x8838",
+          "target": "0x8838"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient13getScreenshotEl",
+      "address": "0x8858",
+      "size": 388,
+      "file": "00008858__ZN9CwbClient13getScreenshotEl.asm.txt",
+      "calls": [
+        {
+          "site": "0x8888",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x890c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8944",
+          "target": "0x9780",
+          "symbol": "_ZNSt3__16vectorI9Rgb_valusNS_9allocatorIS1_EEE20__throw_length_errorB8nn220000Ev"
+        },
+        {
+          "site": "0x8968",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x898c",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x89a4",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x89d8",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8890",
+          "instruction": "cbz x8, #0x89b0",
+          "target": "0x89b0"
+        },
+        {
+          "site": "0x889c",
+          "instruction": "b.eq #0x8948",
+          "target": "0x8948"
+        },
+        {
+          "site": "0x88a8",
+          "instruction": "b.eq #0x8948",
+          "target": "0x8948"
+        },
+        {
+          "site": "0x88d4",
+          "instruction": "b.eq #0x8948",
+          "target": "0x8948"
+        },
+        {
+          "site": "0x88f0",
+          "instruction": "b.ne #0x8910",
+          "target": "0x8910"
+        },
+        {
+          "site": "0x8914",
+          "instruction": "b.le #0x88c4",
+          "target": "0x88c4"
+        },
+        {
+          "site": "0x891c",
+          "instruction": "b.lt #0x88c4",
+          "target": "0x88c4"
+        },
+        {
+          "site": "0x893c",
+          "instruction": "b.eq #0x89b8",
+          "target": "0x89b8"
+        },
+        {
+          "site": "0x8940",
+          "instruction": "tbz x22, #0x3f, #0x8988",
+          "target": "0x8988"
+        },
+        {
+          "site": "0x8950",
+          "instruction": "b.ne #0x896c",
+          "target": "0x896c"
+        },
+        {
+          "site": "0x8980",
+          "instruction": "b.eq #0x89b8",
+          "target": "0x89b8"
+        },
+        {
+          "site": "0x8984",
+          "instruction": "tbnz x22, #0x3f, #0x8944",
+          "target": "0x8944"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient18activateScreenShotEN7android4RectEb",
+      "address": "0x89dc",
+      "size": 612,
+      "file": "000089dc__ZN9CwbClient18activateScreenShotEN7android4RectEb.asm.txt",
+      "calls": [
+        {
+          "site": "0x8a08",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x8a60",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8a68",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x8b10",
+          "target": "0xab48",
+          "symbol": "memmove"
+        },
+        {
+          "site": "0x8b4c",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8b98",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x8bbc",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x8bd4",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x8bec",
+          "target": "0xa500",
+          "symbol": "_ZNSt3__118condition_variable10notify_oneEv"
+        },
+        {
+          "site": "0x8bf4",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x8bf8",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x8c28",
+          "target": "0xa7b8",
+          "symbol": "atrace_begin_body"
+        },
+        {
+          "site": "0x8c30",
+          "target": "0xa800",
+          "symbol": "atrace_end_body"
+        },
+        {
+          "site": "0x8c38",
+          "target": "0x9780",
+          "symbol": "_ZNSt3__16vectorI9Rgb_valusNS_9allocatorIS1_EEE20__throw_length_errorB8nn220000Ev"
+        },
+        {
+          "site": "0x8c3c",
+          "target": "0x96b0",
+          "symbol": "_ZSt28__throw_bad_array_new_lengthB8nn220000v"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8a14",
+          "instruction": "tbnz w0, #1, #0x8c20",
+          "target": "0x8c20"
+        },
+        {
+          "site": "0x8a20",
+          "instruction": "b.ne #0x8a64",
+          "target": "0x8a64"
+        },
+        {
+          "site": "0x8a78",
+          "instruction": "b.eq #0x8acc",
+          "target": "0x8acc"
+        },
+        {
+          "site": "0x8a90",
+          "instruction": "b.eq #0x8ac8",
+          "target": "0x8ac8"
+        },
+        {
+          "site": "0x8a9c",
+          "instruction": "b.ne #0x8a84",
+          "target": "0x8a84"
+        },
+        {
+          "site": "0x8aa8",
+          "instruction": "b.ne #0x8a84",
+          "target": "0x8a84"
+        },
+        {
+          "site": "0x8ab4",
+          "instruction": "b.ne #0x8a84",
+          "target": "0x8a84"
+        },
+        {
+          "site": "0x8ac0",
+          "instruction": "b.ne #0x8a84",
+          "target": "0x8a84"
+        },
+        {
+          "site": "0x8ad0",
+          "instruction": "b.eq #0x8aec",
+          "target": "0x8aec"
+        },
+        {
+          "site": "0x8ad4",
+          "instruction": "tbz w25, #0, #0x8b08",
+          "target": "0x8b08"
+        },
+        {
+          "site": "0x8aec",
+          "instruction": "tbz w25, #0, #0x8b28",
+          "target": "0x8b28"
+        },
+        {
+          "site": "0x8af8",
+          "instruction": "b.hs #0x8b54",
+          "target": "0x8b54"
+        },
+        {
+          "site": "0x8b64",
+          "instruction": "cbnz x10, #0x8c38",
+          "target": "0x8c38"
+        },
+        {
+          "site": "0x8b8c",
+          "instruction": "cbnz x9, #0x8c3c",
+          "target": "0x8c3c"
+        },
+        {
+          "site": "0x8bc8",
+          "instruction": "cbz x24, #0x8bd8",
+          "target": "0x8bd8"
+        },
+        {
+          "site": "0x8bfc",
+          "instruction": "tbnz w0, #1, #0x8c30",
+          "target": "0x8c30"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient18activateScreenShotEN7android9FloatRectEb",
+      "address": "0x8c40",
+      "size": 176,
+      "file": "00008c40__ZN9CwbClient18activateScreenShotEN7android9FloatRectEb.asm.txt",
+      "calls": [
+        {
+          "site": "0x8cdc",
+          "target": "0xa428",
+          "symbol": "_ZN9CwbClient18activateScreenShotEN7android4RectEb"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8c7c",
+          "instruction": "tbz w8, #0, #0x8c88",
+          "target": "0x8c88"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient12getScreenRGBEN7android4RectEPNSt3__16vectorI9Rgb_valusNS2_9allocatorIS4_EEEEi",
+      "address": "0x8cf0",
+      "size": 684,
+      "file": "00008cf0__ZN9CwbClient12getScreenRGBEN7android4RectEPNSt3__16vectorI9Rgb_valusNS2_9allocatorIS4_EEEEi.asm.txt",
+      "calls": [
+        {
+          "site": "0x8d20",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x8d30",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x8d44",
+          "target": "0x9c74",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listI9Rgb_valusNS_9allocatorIS5_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_S8_EENS_4lessIS3_EELb1EEENS6_ISD_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS_5tupleIJRSC_EEENSN_IJEEEEEENSB_INS_15__tree_iteratorIS9_PNS_11__tree_nodeIS9_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x8d70",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x8dc8",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x8ea0",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x8ecc",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x8ee4",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x8f30",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x8f48",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x8f4c",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x8f84",
+          "target": "0xa7b8",
+          "symbol": "atrace_begin_body"
+        },
+        {
+          "site": "0x8f8c",
+          "target": "0xa800",
+          "symbol": "atrace_end_body"
+        },
+        {
+          "site": "0x8f94",
+          "target": "0x9780",
+          "symbol": "_ZNSt3__16vectorI9Rgb_valusNS_9allocatorIS1_EEE20__throw_length_errorB8nn220000Ev"
+        },
+        {
+          "site": "0x8f98",
+          "target": "0x96b0",
+          "symbol": "_ZSt28__throw_bad_array_new_lengthB8nn220000v"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8d24",
+          "instruction": "tbnz w0, #1, #0x8f7c",
+          "target": "0x8f7c"
+        },
+        {
+          "site": "0x8d60",
+          "instruction": "b.eq #0x8dd4",
+          "target": "0x8dd4"
+        },
+        {
+          "site": "0x8da0",
+          "instruction": "b.ne #0x8d68",
+          "target": "0x8d68"
+        },
+        {
+          "site": "0x8dac",
+          "instruction": "b.hs #0x8de0",
+          "target": "0x8de0"
+        },
+        {
+          "site": "0x8ddc",
+          "instruction": "b.lo #0x8db0",
+          "target": "0x8db0"
+        },
+        {
+          "site": "0x8de4",
+          "instruction": "b.lt #0x8ef4",
+          "target": "0x8ef4"
+        },
+        {
+          "site": "0x8e24",
+          "instruction": "b.eq #0x8ef8",
+          "target": "0x8ef8"
+        },
+        {
+          "site": "0x8e44",
+          "instruction": "b.lo #0x8e04",
+          "target": "0x8e04"
+        },
+        {
+          "site": "0x8e60",
+          "instruction": "b.hi #0x8f94",
+          "target": "0x8f94"
+        },
+        {
+          "site": "0x8e90",
+          "instruction": "b.hi #0x8f98",
+          "target": "0x8f98"
+        },
+        {
+          "site": "0x8ed8",
+          "instruction": "cbz x21, #0x8ee8",
+          "target": "0x8ee8"
+        },
+        {
+          "site": "0x8efc",
+          "instruction": "cbz x8, #0x8f40",
+          "target": "0x8f40"
+        },
+        {
+          "site": "0x8f24",
+          "instruction": "b.eq #0x8f40",
+          "target": "0x8f40"
+        },
+        {
+          "site": "0x8f3c",
+          "instruction": "b.ne #0x8f28",
+          "target": "0x8f28"
+        },
+        {
+          "site": "0x8f50",
+          "instruction": "tbnz w0, #1, #0x8f8c",
+          "target": "0x8f8c"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi",
+      "address": "0x8f9c",
+      "size": 1360,
+      "file": "00008f9c__ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi.asm.txt",
+      "calls": [
+        {
+          "site": "0x8fd4",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x8fe0",
+          "target": "0xa878",
+          "symbol": "_ZNSt3__15mutex4lockEv"
+        },
+        {
+          "site": "0x9000",
+          "target": "0xa198",
+          "symbol": "_ZNSt3__16__treeINS_12__value_typeIN7android4RectENS_4listINS_5tupleIJlNS_5arrayIhLm3EEEiEEENS_9allocatorIS8_EEEEEENS_19__map_value_compareIS3_NS_4pairIKS3_SB_EENS_4lessIS3_EELb1EEENS9_ISG_EEE25__emplace_unique_key_argsIS3_JRKNS_21piecewise_construct_tENS5_IJRSF_EEENS5_IJEEEEEENSE_INS_15__tree_iteratorISC_PNS_11__tree_nodeISC_PvEElEEbEERKT_DpOT0_"
+        },
+        {
+          "site": "0x902c",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x90e8",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x910c",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x912c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x913c",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x914c",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x915c",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x91b0",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x91d4",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x91ec",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x9204",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x9218",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x9228",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x9238",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x9260",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x9298",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x92c0",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x92e4",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x92f4",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x9304",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x9314",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x9360",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x939c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x93b0",
+          "target": "0xa890",
+          "symbol": "_ZNSt3__15mutex6unlockEv"
+        },
+        {
+          "site": "0x93b4",
+          "target": "0xa7d0",
+          "symbol": "atrace_get_enabled_tags"
+        },
+        {
+          "site": "0x9418",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0x943c",
+          "target": "0xab30",
+          "symbol": "memcpy"
+        },
+        {
+          "site": "0x945c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x946c",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x947c",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x948c",
+          "target": "0x81bc",
+          "symbol": "_ZNSt3__16vectorIiNS_9allocatorIiEEE9push_backB8nn220000EOi"
+        },
+        {
+          "site": "0x94cc",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        },
+        {
+          "site": "0x94dc",
+          "target": "0xa7b8",
+          "symbol": "atrace_begin_body"
+        },
+        {
+          "site": "0x94e4",
+          "target": "0xa800",
+          "symbol": "atrace_end_body"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x8fd8",
+          "instruction": "tbnz w0, #1, #0x94d4",
+          "target": "0x94d4"
+        },
+        {
+          "site": "0x901c",
+          "instruction": "b.eq #0x919c",
+          "target": "0x919c"
+        },
+        {
+          "site": "0x9054",
+          "instruction": "b.ne #0x9024",
+          "target": "0x9024"
+        },
+        {
+          "site": "0x9060",
+          "instruction": "b.lo #0x9198",
+          "target": "0x9198"
+        },
+        {
+          "site": "0x906c",
+          "instruction": "b.eq #0x9268",
+          "target": "0x9268"
+        },
+        {
+          "site": "0x9080",
+          "instruction": "b.eq #0x9268",
+          "target": "0x9268"
+        },
+        {
+          "site": "0x9094",
+          "instruction": "b.le #0x907c",
+          "target": "0x907c"
+        },
+        {
+          "site": "0x90a0",
+          "instruction": "b.lt #0x907c",
+          "target": "0x907c"
+        },
+        {
+          "site": "0x90d4",
+          "instruction": "b.hi #0x9130",
+          "target": "0x9130"
+        },
+        {
+          "site": "0x9120",
+          "instruction": "cbz x23, #0x9130",
+          "target": "0x9130"
+        },
+        {
+          "site": "0x9168",
+          "instruction": "b.ne #0x9364",
+          "target": "0x9364"
+        },
+        {
+          "site": "0x9198",
+          "instruction": "cbz x8, #0x93e4",
+          "target": "0x93e4"
+        },
+        {
+          "site": "0x91c4",
+          "instruction": "b.hi #0x9208",
+          "target": "0x9208"
+        },
+        {
+          "site": "0x91f8",
+          "instruction": "cbz x22, #0x9208",
+          "target": "0x9208"
+        },
+        {
+          "site": "0x9248",
+          "instruction": "b.ne #0x9364",
+          "target": "0x9364"
+        },
+        {
+          "site": "0x9284",
+          "instruction": "b.hi #0x92e8",
+          "target": "0x92e8"
+        },
+        {
+          "site": "0x92d8",
+          "instruction": "cbz x23, #0x92e8",
+          "target": "0x92e8"
+        },
+        {
+          "site": "0x932c",
+          "instruction": "b.ne #0x9364",
+          "target": "0x9364"
+        },
+        {
+          "site": "0x9368",
+          "instruction": "cbz x8, #0x93ac",
+          "target": "0x93ac"
+        },
+        {
+          "site": "0x9390",
+          "instruction": "b.eq #0x93ac",
+          "target": "0x93ac"
+        },
+        {
+          "site": "0x93a8",
+          "instruction": "b.ne #0x9394",
+          "target": "0x9394"
+        },
+        {
+          "site": "0x93b8",
+          "instruction": "tbnz w0, #1, #0x94e4",
+          "target": "0x94e4"
+        },
+        {
+          "site": "0x9404",
+          "instruction": "b.hi #0x9460",
+          "target": "0x9460"
+        },
+        {
+          "site": "0x9450",
+          "instruction": "cbz x23, #0x9460",
+          "target": "0x9460"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEE",
+      "address": "0x94ec",
+      "size": 48,
+      "file": "000094ec__ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEE.asm.txt",
+      "calls": [
+        {
+          "site": "0x9504",
+          "target": "0xa440",
+          "symbol": "_ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZN9CwbClient12getScreenRGBEN7android9FloatRectElPNSt3__16vectorIiNS2_9allocatorIiEEEE",
+      "address": "0x951c",
+      "size": 192,
+      "file": "0000951c__ZN9CwbClient12getScreenRGBEN7android9FloatRectElPNSt3__16vectorIiNS2_9allocatorIiEEEE.asm.txt",
+      "calls": [
+        {
+          "site": "0x95c4",
+          "target": "0xa440",
+          "symbol": "_ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x9558",
+          "instruction": "tbz w8, #0, #0x9564",
+          "target": "0x9564"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZN9CwbClient12getScreenRGBEN7android9FloatRectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi",
+      "address": "0x95dc",
+      "size": 180,
+      "file": "000095dc__ZN9CwbClient12getScreenRGBEN7android9FloatRectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi.asm.txt",
+      "calls": [
+        {
+          "site": "0x967c",
+          "target": "0xa440",
+          "symbol": "_ZN9CwbClient12getScreenRGBEN7android4RectElPNSt3__16vectorIiNS2_9allocatorIiEEEERi"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x9618",
+          "instruction": "tbz w8, #0, #0x9624",
+          "target": "0x9624"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZNSt3__114__thread_proxyB8nn220000INS_5tupleIJNS_10unique_ptrINS_15__thread_structENS_14default_deleteIS3_EEEEZN9CwbClientC1EvE3$_0EEEEEPvSA_",
+      "address": "0x9c04",
+      "size": 112,
+      "file": "00009c04__ZNSt3__114__thread_proxyB8nn220000INS_5tupleIJNS_10unique_ptrINS_15__thread_structENS_14default_deleteIS3_EEEEZN9CwbClientC1EvE3$_0EEEEEPvSA_.asm.txt",
+      "calls": [
+        {
+          "site": "0x9c18",
+          "target": "0xaa28",
+          "symbol": "_ZNSt3__119__thread_local_dataEv"
+        },
+        {
+          "site": "0x9c28",
+          "target": "0xaa40",
+          "symbol": "pthread_setspecific"
+        },
+        {
+          "site": "0x9c30",
+          "target": "0xa3b0",
+          "symbol": "_ZN9CwbClient10threadLoopEv"
+        },
+        {
+          "site": "0x9c44",
+          "target": "0xaa58",
+          "symbol": "_ZNSt3__115__thread_structD1Ev"
+        },
+        {
+          "site": "0x9c50",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0x9c5c",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0x9c3c",
+          "instruction": "cbz x20, #0x9c54",
+          "target": "0x9c54"
+        }
+      ]
+    },
+    {
+      "symbol": "_ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEED0Ev.a89a453f51052cb59b5907e712b89d07",
+      "address": "0x9f30",
+      "size": 12,
+      "file": "00009f30__ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEED0Ev.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [
+        {
+          "site": "0x9f38",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEE7__cloneEv.a89a453f51052cb59b5907e712b89d07",
+      "address": "0x9f3c",
+      "size": 72,
+      "file": "00009f3c__ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEE7__cloneEv.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [
+        {
+          "site": "0x9f54",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEE7__cloneEPNS0_6__baseISG_EE.a89a453f51052cb59b5907e712b89d07",
+      "address": "0x9f84",
+      "size": 36,
+      "file": "00009f84__ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEE7__cloneEPNS0_6__baseISG_EE.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEE18destroy_deallocateEv.a89a453f51052cb59b5907e712b89d07",
+      "address": "0x9fa8",
+      "size": 16,
+      "file": "00009fa8__ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEE18destroy_deallocateEv.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEEclEOS9_SF_.a89a453f51052cb59b5907e712b89d07",
+      "address": "0x9fb8",
+      "size": 116,
+      "file": "00009fb8__ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_0FvN6vendor5oplus8hardware3cwb4V1_05ErrorERKN7android8hardware10hidl_arrayIhLm3EJEEEEEclEOS9_SF_.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [
+        {
+          "site": "0xa010",
+          "target": "0xa590",
+          "symbol": "systemTime"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEED0Ev.a89a453f51052cb59b5907e712b89d07",
+      "address": "0xa02c",
+      "size": 12,
+      "file": "0000a02c__ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEED0Ev.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [
+        {
+          "site": "0xa034",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEE7__cloneEv.a89a453f51052cb59b5907e712b89d07",
+      "address": "0xa038",
+      "size": 60,
+      "file": "0000a038__ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEE7__cloneEv.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [
+        {
+          "site": "0xa050",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        }
+      ],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEE7__cloneEPNS0_6__baseISA_EE.a89a453f51052cb59b5907e712b89d07",
+      "address": "0xa074",
+      "size": 28,
+      "file": "0000a074__ZNKSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEE7__cloneEPNS0_6__baseISA_EE.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [],
+      "conditional_branches": []
+    },
+    {
+      "symbol": "_ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEEclEOiS9_.a89a453f51052cb59b5907e712b89d07",
+      "address": "0xa090",
+      "size": 264,
+      "file": "0000a090__ZNSt3__110__function6__funcIZN9CwbClient10threadLoopEvE3$_1FviRKN7android8hardware8hidl_vecIjEEEEclEOiS9_.a89a453f51052cb59b5907e712b89d07.asm.txt",
+      "calls": [
+        {
+          "site": "0xa0c0",
+          "target": "0xa4d0",
+          "symbol": "_Znwm"
+        },
+        {
+          "site": "0xa0d0",
+          "target": "0xab18",
+          "symbol": "memset"
+        },
+        {
+          "site": "0xa168",
+          "target": "0xa560",
+          "symbol": "_ZdlPvm"
+        },
+        {
+          "site": "0xa194",
+          "target": "0xa578",
+          "symbol": "__android_log_print"
+        }
+      ],
+      "conditional_branches": [
+        {
+          "site": "0xa0ac",
+          "instruction": "cbz w23, #0xa16c",
+          "target": "0xa16c"
+        },
+        {
+          "site": "0xa0e0",
+          "instruction": "b.lo #0xa120",
+          "target": "0xa120"
+        },
+        {
+          "site": "0xa0ec",
+          "instruction": "b.lo #0xa120",
+          "target": "0xa120"
+        },
+        {
+          "site": "0xa114",
+          "instruction": "b.ne #0xa100",
+          "target": "0xa100"
+        },
+        {
+          "site": "0xa11c",
+          "instruction": "b.eq #0xa140",
+          "target": "0xa140"
+        },
+        {
+          "site": "0xa13c",
+          "instruction": "b.ne #0xa130",
+          "target": "0xa130"
+        }
+      ]
+    },
+    {
+      "symbol": "_GLOBAL__sub_I_CwbClient.cpp",
+      "address": "0xa294",
+      "size": 100,
+      "file": "0000a294__GLOBAL__sub_I_CwbClient.cpp.asm.txt",
+      "calls": [
+        {
+          "site": "0xa2d0",
+          "target": "0xa338",
+          "symbol": "__cxa_atexit"
+        },
+        {
+          "site": "0xa2f4",
+          "target": "0xa338",
+          "symbol": "__cxa_atexit"
+        }
+      ],
+      "conditional_branches": []
+    }
+  ]
+}

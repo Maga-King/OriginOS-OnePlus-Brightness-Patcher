@@ -1,0 +1,6 @@
+id=op13_cos_cwb
+name=OP13 OriginOS 官方硬件 CWB 补偿测试
+version=v5-20261005
+versionCode=2026100505
+author=Nyako
+description=一加13当前OriginOS DSU专用；官方CWB客户端、设备工厂校准和V2.1补偿；保留已有OVSC修复；无截图轮询、无root常驻守护进程。

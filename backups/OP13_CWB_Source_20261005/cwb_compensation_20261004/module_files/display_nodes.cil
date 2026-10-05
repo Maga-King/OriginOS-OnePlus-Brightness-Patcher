@@ -1,0 +1,39 @@
+; Solidification companion of the display-node block in sepolicy.rule.
+; Existing OP13/OriginOS types only. No new types or permissive setting.
+; These grants apply by TYPE, not only under /sys/kernel/oplus_display.
+; Merge into the ROM's policy input and rebuild its normal/debug policy
+; caches with the complete matching CIL chain. Copying this file into a
+; running system does NOT install policy. Magisk/KernelSU use sepolicy.rule.
+(allow init sysfs_graphics_ffl (dir (getattr open read search)))
+(allow init sysfs_graphics_ffl (file (getattr open read write)))
+(allow init oppo_log_sysfs (dir (getattr open read search)))
+(allow init oppo_log_sysfs (file (getattr open read write)))
+(allow init alpha_sysfs (dir (getattr open read search)))
+(allow init alpha_sysfs (file (getattr open read write)))
+(allow system_server sysfs_graphics_ffl (dir (getattr open read search)))
+(allow system_server sysfs_graphics_ffl (file (getattr open read write)))
+(allow system_server oppo_log_sysfs (dir (getattr open read search)))
+(allow system_server oppo_log_sysfs (file (getattr open read write)))
+(allow system_server alpha_sysfs (dir (getattr open read search)))
+(allow system_server alpha_sysfs (file (getattr open read write)))
+(allow vendor_init sysfs_graphics_ffl (dir (getattr open read search)))
+(allow vendor_init sysfs_graphics_ffl (file (getattr open read write)))
+(allow vendor_init oppo_log_sysfs (dir (getattr open read search)))
+(allow vendor_init oppo_log_sysfs (file (getattr open read write)))
+(allow vendor_init alpha_sysfs (dir (getattr open read search)))
+(allow vendor_init alpha_sysfs (file (getattr open read write)))
+(allow surfaceflinger sysfs_graphics_ffl (dir (getattr open read search)))
+(allow surfaceflinger sysfs_graphics_ffl (file (getattr open read write)))
+(allow surfaceflinger oppo_log_sysfs (dir (getattr open read search)))
+(allow surfaceflinger oppo_log_sysfs (file (getattr open read write)))
+(allow surfaceflinger alpha_sysfs (dir (getattr open read search)))
+(allow surfaceflinger alpha_sysfs (file (getattr open read write)))
+(allow hal_graphics_composer_default sysfs_graphics_ffl (dir (getattr open read search)))
+(allow hal_graphics_composer_default sysfs_graphics_ffl (file (getattr open read write)))
+(allow hal_graphics_composer_default oppo_log_sysfs (dir (getattr open read search)))
+(allow hal_graphics_composer_default oppo_log_sysfs (file (getattr open read write)))
+(allow hal_graphics_composer_default alpha_sysfs (dir (getattr open read search)))
+(allow hal_graphics_composer_default alpha_sysfs (file (getattr open read write)))
+; Actual fingerprint HAL was denied directory search during the v1 boot.
+(allow hal_fingerprint_oppo sysfs_graphics_ffl (dir (getattr open read search)))
+(allow hal_fingerprint_oppo sysfs_graphics_ffl (file (getattr open read write)))

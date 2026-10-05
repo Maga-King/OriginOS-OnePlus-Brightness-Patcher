@@ -1,0 +1,74 @@
+一加13 OriginOS CWB源码交接与备份说明
+日期：2026-10-05
+
+用途
+这是截图中第1条路线所需的现有CWB源码包，交给适配者继续做13T或其他机型。
+不是刷机ZIP，也不是已经完成的13T CWB模块。不要把本包直接刷入Magisk/KernelSU。
+
+一、从哪里看
+cwb_compensation_20261004/：原样保存当前开发源码、构建脚本、原生探针、算法/状态测试。
+cwb_compensation_20261004/module_files/：模块模板、sepolicy.rule及固化CIL。
+cwb_compensation_20261004/pattern_app/：静态ROI色块App源码。
+tools/OplusOriginPatcher/：这些脚本导入的ELF/反汇编、配置、CIL及路径工具源码快照。
+docs/OriginOS_一加亮度_HDR_CWB20261005.txt：20章完整OriginOS修复教程。
+13T适配取材清单.txt：13T具体参数范例、输入文件及重新定位项目。
+BACKUP_MANIFEST.json：所收文件与公开/本地材料边界，无须反复进行SHA256校验。
+
+二、最重要的版本区别
+已在一加13实机运行的是CWB v5＋显示节点权限v3；普通五色和FHD/QHD取色通过。
+当前源码含后续DC/hall/factory切换、DBV0/1、快速停启、迟到回调等修正，
+它们在独立单测通过，但尚未打包安装；因此源码快照不等于已部署v5的原始源码版本。
+SF RGB数学404组对照通过，不代表正式DC/FOD/SF生产取色后端已实现。
+module_files/README.txt保留了当时“待测试”的历史描述；当前状态以上述说明和完整教程为准。
+
+三、构建前准备
+Python3、pyelftools、capstone；涉及官方ARM64对照时还需要unicorn。
+Android SDK、NDK clang；静态色块App用Java17与SDK工具。
+WSL/secilc用于完整策略编译，必须提供目标ROM匹配的完整CIL输入。
+tools/OplusOriginPatcher/requirements.txt保存已有工具依赖版本；其中GUI打包依赖不是CWB必选。
+所有SDK/NDK/Java本机路径、SourceRoot、输出路径要改成接收者自己的真实路径。
+
+四、不能忘记的外部输入
+源码为了保留当时实验状态，仍有固定工作目录、NDK路径及OP13尺寸检查。
+build.py需要自己的libsensorservice_live.so及官方Fusion JSON。
+build_deployment.py需要目标原件preinstall_libsensorservice.so、官方CWB客户端和接口库。
+patch_cwb_buffer.py需要自己的origin_live_vendor_cwb.so，且目前仅支持已审计OP13尺寸/函数结构。
+官方数学oracle需要自己的官方surfaceflinger/Fusion ELF；缺这些输入不能假装测试通过。
+完整CIL编译还需要目标各分区策略，不是三条allow文本即可编译。
+
+五、已有构建入口
+在真实输入、相对目录、路径和输出版本都适配后，现有顺序为：
+  python build.py --quiet
+  python patch_cwb_buffer.py
+  python build_deployment.py
+不要原样运行最后一步覆盖已实测的OP13 v5 ZIP；先改成13T独立ID/版本/输出路径。
+这只是现有构建流程，不是面向所有机型的一键生成器。
+优先保持目标原libsensorservice和既有OVSC；不要用patchelf盲目移动动态字符串表。
+
+六、适配逻辑
+保留现有Vivo自动亮度引擎，在其消费之前补偿标准光感lux。
+从完整物理包取RGBC/DBV/积分时间，按严格相同timestamp＋租约代际关联标准alias。
+官方硬件CWB只取真实ALS ROI；校准W_VIEW从当前物理设备运行时读取，不复制别人的persist。
+AIDL/HIDL activate生命周期成功后才记租约，最后停订阅/息屏停止，不做root轮询。
+对新机型重查handle/type/104字节布局/客户端私有ABI/ROI/权重/时间窗/模式选择。
+普通模式不能冒充DC、工厂或FOD/SF模式；未知分支保留原lux并明确未支持。
+
+七、只读与有状态测试分开
+CWB_check.sh和默认Test-PassiveColors.ps1使用已有服务有限只读采样。
+旧Test-OriginStatic.ps1/live_probe会建立候选CWB并可能写SSC，不能当常规只读检查。
+不要在官方Fusion已经上报SSC时再启动另一个写入器。
+不要su拉起替代sensorservice假冒系统服务；生产库必须在真实system_server中加载。
+颜色App当前ROI仍是OP13，不是13T；适配时必须改自己的ROI与显示布局。
+
+八、本地完整备份与GitHub公开快照
+本地备份若含private_inputs/，其中OP13原始ELF和已部署v5仅供回退、ABI分析，
+不是13T部署载荷。OP13T目录只留已收到的Fusion/CWB权重参考，不含另一台persist校准。
+GitHub公开快照不包含private_inputs、厂商ELF、已部署模块二进制、运行日志、截图或凭据。
+公开脚本里固定设备序列号替换成DEVICE_SERIAL；本地源码原件不改。
+生成的official_profile.h与sf_rgb_lut.h是OP13研究数值，不是多机型通用校准。
+
+九、当前目录布局的说明
+源码包根保留cwb_compensation_20261004与tools/OplusOriginPatcher的相对布局。
+部分研究脚本还引用包外analysis/...、官方ROM及现有工具路径；需用自己的取材重指向。
+没有SDK、完整ROM、当前设备校准，不能承诺“解压后一条命令全部构建成功”。
+13T适配者拿此包不需要重新实现已有路由/状态/数学，但仍须完成13T现场ABI和光学验证。

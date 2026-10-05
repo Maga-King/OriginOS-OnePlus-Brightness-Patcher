@@ -1,0 +1,98 @@
+{
+  "source": "E:\\MIO\\analysis\\originos_hdr_vendor_compare_20261003\\coloros\\files\\system\\bin\\surfaceflinger",
+  "function": "_ZN7android19OplusSurfaceFlinger13calcPixelsRGBEPKjRNS_7details6TMat44IfEEjRKNS_4RectERNS_3RGBE",
+  "address": "0x3f69e0",
+  "scope": "Offline mathematical oracle, not live SF backend",
+  "cases": [
+    {
+      "case": "red",
+      "rgba": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "official_rgb_and_purity": [
+        255,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "case": "green",
+      "rgba": [
+        0,
+        255,
+        0,
+        255
+      ],
+      "official_rgb_and_purity": [
+        0,
+        255,
+        0,
+        1
+      ]
+    },
+    {
+      "case": "blue",
+      "rgba": [
+        0,
+        0,
+        255,
+        255
+      ],
+      "official_rgb_and_purity": [
+        0,
+        0,
+        255,
+        1
+      ]
+    },
+    {
+      "case": "black",
+      "rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "official_rgb_and_purity": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "case": "white",
+      "rgba": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "official_rgb_and_purity": [
+        255,
+        255,
+        255,
+        1
+      ]
+    },
+    {
+      "case": "gray",
+      "rgba": [
+        128,
+        128,
+        128,
+        255
+      ],
+      "official_rgb_and_purity": [
+        128,
+        128,
+        128,
+        1
+      ]
+    }
+  ]
+}

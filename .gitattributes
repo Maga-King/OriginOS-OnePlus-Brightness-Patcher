@@ -10,3 +10,6 @@
 *.h text eol=lf
 *.spec text eol=lf
 Makefile text eol=lf
+
+# Research snapshots preserve original bytes (including line endings).
+backups/OP13_CWB_Source_20261005/** -text

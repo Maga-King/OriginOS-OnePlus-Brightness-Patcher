@@ -1,0 +1,22 @@
+{
+  "source": "E:\\MIO\\analysis\\originos_hdr_vendor_compare_20261003\\coloros\\files\\system\\bin\\surfaceflinger",
+  "cases": 404,
+  "errors": [],
+  "pass": true,
+  "coverage": [
+    "256 grayscale values",
+    "RGBA and alpha",
+    "3-pixel sampling stride",
+    "gamma LUT and nearest inverse lookup",
+    "purity thresholds",
+    "positive and negative matrices",
+    "linear correction branches and RGB gains",
+    "diagnostic logging on/off"
+  ],
+  "not_covered": [
+    "SF listener and dirty-frame lifecycle",
+    "actual display color matrix acquisition",
+    "SSC capture/present fences and DC integration",
+    "power consumption"
+  ]
+}

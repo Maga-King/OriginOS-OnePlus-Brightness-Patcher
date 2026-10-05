@@ -1,0 +1,462 @@
+{
+    "version":  1,
+    "snapshot":  "2026-10-05",
+    "includes_private_inputs":  false,
+    "device_identifier_redacted_in":  [
+                                          "cwb_compensation_20261004/Test-OfficialSpatial.ps1",
+                                          "cwb_compensation_20261004/Test-OriginStatic.ps1",
+                                          "cwb_compensation_20261004/Test-PassiveBrightness.ps1",
+                                          "cwb_compensation_20261004/Test-PassiveColors.ps1",
+                                          "tools/Backup-OriginOSCwbSources.ps1"
+                                      ],
+    "source_state":  "current development source; not identical to deployed v5",
+    "excluded_from_public":  [
+                                 "private_inputs/",
+                                 "firmware ELF",
+                                 "deployed module binaries",
+                                 "runtime logs",
+                                 "persist or per-device W_VIEW"
+                             ],
+    "files":  [
+                  {
+                      "Path":  "cwb_compensation_20261004/analyze_native_capture.py",
+                      "Category":  "source",
+                      "Bytes":  2110
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/analyze_spatial.py",
+                      "Category":  "source",
+                      "Bytes":  2355
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/audit_cwb_state.py",
+                      "Category":  "source",
+                      "Bytes":  1253
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/audit_official_branches.py",
+                      "Category":  "source",
+                      "Bytes":  5541
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/build.py",
+                      "Category":  "source",
+                      "Bytes":  3532
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/build_check_sh.py",
+                      "Category":  "source",
+                      "Bytes":  739
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/build_deployment.py",
+                      "Category":  "source",
+                      "Bytes":  6804
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/build_display_policy_module.py",
+                      "Category":  "source",
+                      "Bytes":  3390
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/capture_window.h",
+                      "Category":  "source",
+                      "Bytes":  1287
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/Capture-OfficialBaseline.ps1",
+                      "Category":  "source",
+                      "Bytes":  1840
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/comp_status_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  4438
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/compensation_math.h",
+                      "Category":  "source",
+                      "Bytes":  3430
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/cwb_check.sh.in",
+                      "Category":  "source",
+                      "Bytes":  7783
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/cwb_compensator.cpp",
+                      "Category":  "source",
+                      "Bytes":  21675
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/cwb_compensator.h",
+                      "Category":  "source",
+                      "Bytes":  727
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/cwb_compensator_state_test.cpp",
+                      "Category":  "source",
+                      "Bytes":  3715
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/cwb_state_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  8341
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/factory_calibration.h",
+                      "Category":  "source",
+                      "Bytes":  4030
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/fetch_capture_reference.py",
+                      "Category":  "source",
+                      "Bytes":  1454
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/generate_profile.py",
+                      "Category":  "source",
+                      "Bytes":  3695
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/generate_sf_rgb_lut.py",
+                      "Category":  "source",
+                      "Bytes":  2230
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/generate_timing_oracle.py",
+                      "Category":  "source",
+                      "Bytes":  1151
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/geometry_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  3788
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/inspect_official.py",
+                      "Category":  "source",
+                      "Bytes":  1576
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/inspect_sf_capture_abi.py",
+                      "Category":  "source",
+                      "Bytes":  2197
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/lifecycle_site.h",
+                      "Category":  "source",
+                      "Bytes":  300
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/light_packet_router.h",
+                      "Category":  "source",
+                      "Bytes":  4267
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/light_packet_router_test.cpp",
+                      "Category":  "source",
+                      "Bytes":  2979
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/live_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  4369
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/loader_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  2259
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/math_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  1003
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_profile.h",
+                      "Category":  "source",
+                      "Bytes":  38507
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/patch_cwb_buffer.py",
+                      "Category":  "source",
+                      "Bytes":  5187
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/run_live_probe.sh",
+                      "Category":  "source",
+                      "Bytes":  251
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/sample_selection.h",
+                      "Category":  "source",
+                      "Bytes":  864
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/sf_rgb_lut.h",
+                      "Category":  "source",
+                      "Bytes":  5772
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/sf_rgb_math.h",
+                      "Category":  "source",
+                      "Bytes":  5106
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/sf_rgb_math_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  1228
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/sf_rgb_oracle.py",
+                      "Category":  "source",
+                      "Bytes":  5295
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/sf_roi_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  12989
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/system_interposer.cpp",
+                      "Category":  "source",
+                      "Bytes":  3481
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/test_cwb_buffer_patch.py",
+                      "Category":  "source",
+                      "Bytes":  2653
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/test_display_policy.py",
+                      "Category":  "source",
+                      "Bytes":  5706
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/test_official_modes.py",
+                      "Category":  "source",
+                      "Bytes":  6170
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/test_sf_rgb_math.py",
+                      "Category":  "source",
+                      "Bytes":  4703
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/test_vivo_sf_credentials.py",
+                      "Category":  "source",
+                      "Bytes":  3722
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/Test-OfficialSpatial.ps1",
+                      "Category":  "source",
+                      "Bytes":  1338
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/Test-OriginStatic.ps1",
+                      "Category":  "source",
+                      "Bytes":  3030
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/Test-PassiveBrightness.ps1",
+                      "Category":  "source",
+                      "Bytes":  4001
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/Test-PassiveColors.ps1",
+                      "Category":  "source",
+                      "Bytes":  5294
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/timing_oracle.h",
+                      "Category":  "source",
+                      "Bytes":  741
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/timing_test.cpp",
+                      "Category":  "source",
+                      "Bytes":  2906
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/vendor_loader_probe.cpp",
+                      "Category":  "source",
+                      "Bytes":  612
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/module_files/module.prop",
+                      "Category":  "source",
+                      "Bytes":  295
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/module_files/customize.sh",
+                      "Category":  "source",
+                      "Bytes":  1004
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/module_files/sepolicy.rule",
+                      "Category":  "source",
+                      "Bytes":  4675
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/module_files/display_nodes.cil",
+                      "Category":  "source",
+                      "Bytes":  2818
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/module_files/user_additions.cil",
+                      "Category":  "source",
+                      "Bytes":  1143
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/module_files/README.txt",
+                      "Category":  "source",
+                      "Bytes":  5189
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/pattern_app/AndroidManifest.xml",
+                      "Category":  "source",
+                      "Bytes":  699
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/pattern_app/MainActivity.java",
+                      "Category":  "source",
+                      "Bytes":  5513
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/pattern_app/build.py",
+                      "Category":  "source",
+                      "Bytes":  1731
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/research_native.py",
+                      "Category":  "supporting-source",
+                      "Bytes":  1671
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/native.py",
+                      "Category":  "supporting-source",
+                      "Bytes":  12569
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/configs.py",
+                      "Category":  "supporting-source",
+                      "Bytes":  13764
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/sources.py",
+                      "Category":  "supporting-source",
+                      "Bytes":  3800
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/cil_policy.py",
+                      "Category":  "supporting-source",
+                      "Bytes":  6135
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/rom_io.py",
+                      "Category":  "supporting-source",
+                      "Bytes":  8889
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/requirements.txt",
+                      "Category":  "supporting-source",
+                      "Bytes":  154
+                  },
+                  {
+                      "Path":  "tools/OplusOriginPatcher/LICENSE",
+                      "Category":  "supporting-source",
+                      "Bytes":  1297
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/mode_oracle_report.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  10626
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/sf_lut_report.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  358
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/sf_rgb_math_test_report.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  669
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/sf_rgb_oracle_report.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  1617
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/vivo_sf_credential_report.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  2124
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/client/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  93187
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/fusion/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  1093163
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/guihelper/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  17674
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/officialsf/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  168629
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/originsf/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  650748
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/vendor/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  330247
+                  },
+                  {
+                      "Path":  "cwb_compensation_20261004/official_branch_audit/vivogui/index.json",
+                      "Category":  "offline-audit-metadata",
+                      "Bytes":  103086
+                  },
+                  {
+                      "Path":  "docs/OriginOS_一加亮度_HDR_CWB20261005.txt",
+                      "Category":  "tutorial",
+                      "Bytes":  89305
+                  },
+                  {
+                      "Path":  "CWB源码交接说明.txt",
+                      "Category":  "handoff",
+                      "Bytes":  5221
+                  },
+                  {
+                      "Path":  "13T适配取材清单.txt",
+                      "Category":  "handoff",
+                      "Bytes":  4443
+                  },
+                  {
+                      "Path":  "tools/Backup-OriginOSCwbSources.ps1",
+                      "Category":  "packaging-script",
+                      "Bytes":  8785
+                  },
+                  {
+                      "Path":  "tools/cwb_backup_docs/CWB源码交接说明.txt",
+                      "Category":  "packaging-template",
+                      "Bytes":  5221
+                  },
+                  {
+                      "Path":  "tools/cwb_backup_docs/13T适配取材清单.txt",
+                      "Category":  "packaging-template",
+                      "Bytes":  4443
+                  }
+              ]
+}

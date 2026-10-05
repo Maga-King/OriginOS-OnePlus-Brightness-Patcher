@@ -42,6 +42,28 @@
 目标应已有匹配硬件的 vendor/odm、显示 HAL 和 AL1S `/sys/lcm` 亮度 ABI。
 工具不提供之前套错其它机型 vendor 的恢复包，不自动修改 prop，也不修改 hals.conf、JAR 或 RRO。
 
+## OriginOS 完整教程与 CWB 源码备份
+
+从最初 OriginOS 取材开始，到亮度/HBM/HDR 原生修复、内核兼容、SELinux 和后期 CWB 的
+[20章详细 TXT 教程](docs/OriginOS_一加亮度_HDR_CWB20261005.txt)已附在仓库。
+
+另保存了 [OP13 CWB 源码快照](backups/OP13_CWB_Source_20261005)及
+[可直接下载的公开源码 ZIP](archives/OP13_CWB_Source_20261005_public.zip)，
+方便拿已有实现继续适配 13T，而不用从零重写。
+快照包含补偿、完整光感路由、生命周期、原生探针、构建脚本、模块/CIL模板、色块 App、
+离线测试和所需的工具源码依赖；详见快照内的《CWB源码交接说明》和《13T适配取材清单》。
+
+需要分清三个状态：
+
+- 基础生成器仍不自动安装 CWB；这个备份是后期独立研究源码，不是集成开关。
+- OP13 已部署 v5 的普通五色及 FHD/QHD 实测通过；当前源码还含尚未部署的后续状态修正。
+- DC/FOD 的 SF 数学已做离线对照，但正式 SF 后端尚未完成；13T 也还需自己的 ABI/光学实测。
+
+源码快照不是刷机模块，也不是任意机型解压即能构建的成品：SDK/NDK路径、目标 ELF、
+官方 JSON、工厂校准、事件布局、CWB ABI 和输出版本需按交接说明准备。
+公开快照不包含厂商原始库、已部署模块二进制、私人运行日志、截图、persist或凭据；
+脚本固定设备序列号已脱敏。本地完整备份另存 Videos，不上传其中的 `private_inputs/`。
+
 ## 源码与构建
 
 Windows 使用 Python 3.12.10：

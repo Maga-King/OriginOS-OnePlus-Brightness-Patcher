@@ -1,0 +1,7 @@
+{
+  "source": "E:\\MIO\\analysis\\originos_hdr_vendor_compare_20261003\\coloros\\files\\system\\bin\\surfaceflinger",
+  "function": "_ZN7android19OplusSurfaceFlinger13calcPixelsRGBEPKjRNS_7details6TMat44IfEEjRKNS_4RectERNS_3RGBE",
+  "table_address": "0xb0470",
+  "entries": 256,
+  "purpose": "SF RGB reconstruction, not ordinary hardware CWB weights"
+}
